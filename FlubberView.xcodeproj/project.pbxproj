@@ -10,6 +10,7 @@
 		B53AF94A1D8F41CF00E881DB /* FlubberView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53AF9401D8F41CE00E881DB /* FlubberView.framework */; };
 		B53AF94F1D8F41CF00E881DB /* FlubberViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53AF94E1D8F41CF00E881DB /* FlubberViewTests.swift */; };
 		B53AF9511D8F41CF00E881DB /* FlubberView.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AF9431D8F41CE00E881DB /* FlubberView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B53AF95B1D8F50C300E881DB /* FlubberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53AF95A1D8F50C300E881DB /* FlubberView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		B53AF9491D8F41CF00E881DB /* FlubberViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlubberViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B53AF94E1D8F41CF00E881DB /* FlubberViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlubberViewTests.swift; sourceTree = "<group>"; };
 		B53AF9501D8F41CF00E881DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B53AF95A1D8F50C300E881DB /* FlubberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlubberView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +73,10 @@
 		B53AF9421D8F41CE00E881DB /* FlubberView */ = {
 			isa = PBXGroup;
 			children = (
+				B53AF95C1D8F514A00E881DB /* Classes */,
 				B53AF9431D8F41CE00E881DB /* FlubberView.h */,
 				B53AF9441D8F41CE00E881DB /* Info.plist */,
+				B53AF95A1D8F50C300E881DB /* FlubberView.swift */,
 			);
 			path = FlubberView;
 			sourceTree = "<group>";
@@ -84,6 +88,13 @@
 				B53AF9501D8F41CF00E881DB /* Info.plist */,
 			);
 			path = FlubberViewTests;
+			sourceTree = "<group>";
+		};
+		B53AF95C1D8F514A00E881DB /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,6 +160,7 @@
 					B53AF93F1D8F41CE00E881DB = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 8LHVT7DW44;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 					B53AF9481D8F41CF00E881DB = {
@@ -198,6 +210,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B53AF95B1D8F50C300E881DB /* FlubberView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +335,7 @@
 		B53AF9551D8F41CF00E881DB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8LHVT7DW44;
@@ -334,6 +348,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nicethings.FlubberView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -341,6 +356,7 @@
 		B53AF9561D8F41CF00E881DB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8LHVT7DW44;
@@ -360,6 +376,7 @@
 		B53AF9581D8F41CF00E881DB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 8LHVT7DW44;
 				INFOPLIST_FILE = FlubberViewTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -372,6 +389,7 @@
 		B53AF9591D8F41CF00E881DB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 8LHVT7DW44;
 				INFOPLIST_FILE = FlubberViewTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
