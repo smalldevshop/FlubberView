@@ -11,6 +11,11 @@
 		B53AF94F1D8F41CF00E881DB /* FlubberViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53AF94E1D8F41CF00E881DB /* FlubberViewTests.swift */; };
 		B53AF9511D8F41CF00E881DB /* FlubberView.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AF9431D8F41CE00E881DB /* FlubberView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B53AF95B1D8F50C300E881DB /* FlubberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53AF95A1D8F50C300E881DB /* FlubberView.swift */; };
+		B5474CA61D97050700B9AA17 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5474CA51D97050700B9AA17 /* AppDelegate.swift */; };
+		B5474CA81D97050700B9AA17 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5474CA71D97050700B9AA17 /* ViewController.swift */; };
+		B5474CAB1D97050700B9AA17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5474CA91D97050700B9AA17 /* Main.storyboard */; };
+		B5474CAD1D97050700B9AA17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5474CAC1D97050700B9AA17 /* Assets.xcassets */; };
+		B5474CB01D97050700B9AA17 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5474CAE1D97050700B9AA17 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +36,13 @@
 		B53AF94E1D8F41CF00E881DB /* FlubberViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlubberViewTests.swift; sourceTree = "<group>"; };
 		B53AF9501D8F41CF00E881DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B53AF95A1D8F50C300E881DB /* FlubberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlubberView.swift; sourceTree = "<group>"; };
+		B5474CA31D97050700B9AA17 /* FlubberView Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FlubberView Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5474CA51D97050700B9AA17 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B5474CA71D97050700B9AA17 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B5474CAA1D97050700B9AA17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B5474CAC1D97050700B9AA17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B5474CAF1D97050700B9AA17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B5474CB11D97050700B9AA17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +61,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B5474CA01D97050700B9AA17 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -57,6 +76,7 @@
 			children = (
 				B53AF9421D8F41CE00E881DB /* FlubberView */,
 				B53AF94D1D8F41CF00E881DB /* FlubberViewTests */,
+				B5474CA41D97050700B9AA17 /* FlubberView Example */,
 				B53AF9411D8F41CE00E881DB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,6 +86,7 @@
 			children = (
 				B53AF9401D8F41CE00E881DB /* FlubberView.framework */,
 				B53AF9491D8F41CF00E881DB /* FlubberViewTests.xctest */,
+				B5474CA31D97050700B9AA17 /* FlubberView Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +116,19 @@
 			children = (
 			);
 			name = Classes;
+			sourceTree = "<group>";
+		};
+		B5474CA41D97050700B9AA17 /* FlubberView Example */ = {
+			isa = PBXGroup;
+			children = (
+				B5474CA51D97050700B9AA17 /* AppDelegate.swift */,
+				B5474CA71D97050700B9AA17 /* ViewController.swift */,
+				B5474CA91D97050700B9AA17 /* Main.storyboard */,
+				B5474CAC1D97050700B9AA17 /* Assets.xcassets */,
+				B5474CAE1D97050700B9AA17 /* LaunchScreen.storyboard */,
+				B5474CB11D97050700B9AA17 /* Info.plist */,
+			);
+			path = "FlubberView Example";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +181,23 @@
 			productReference = B53AF9491D8F41CF00E881DB /* FlubberViewTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		B5474CA21D97050700B9AA17 /* FlubberView Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5474CB41D97050700B9AA17 /* Build configuration list for PBXNativeTarget "FlubberView Example" */;
+			buildPhases = (
+				B5474C9F1D97050700B9AA17 /* Sources */,
+				B5474CA01D97050700B9AA17 /* Frameworks */,
+				B5474CA11D97050700B9AA17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FlubberView Example";
+			productName = "FlubberView Example";
+			productReference = B5474CA31D97050700B9AA17 /* FlubberView Example.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -168,6 +219,11 @@
 						DevelopmentTeam = 8LHVT7DW44;
 						ProvisioningStyle = Automatic;
 					};
+					B5474CA21D97050700B9AA17 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 8LHVT7DW44;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = B53AF93A1D8F41CE00E881DB /* Build configuration list for PBXProject "FlubberView" */;
@@ -176,12 +232,14 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = B53AF9361D8F41CE00E881DB;
 			productRefGroup = B53AF9411D8F41CE00E881DB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				B5474CA21D97050700B9AA17 /* FlubberView Example */,
 				B53AF93F1D8F41CE00E881DB /* FlubberView */,
 				B53AF9481D8F41CF00E881DB /* FlubberViewTests */,
 			);
@@ -200,6 +258,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5474CA11D97050700B9AA17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5474CB01D97050700B9AA17 /* LaunchScreen.storyboard in Resources */,
+				B5474CAD1D97050700B9AA17 /* Assets.xcassets in Resources */,
+				B5474CAB1D97050700B9AA17 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +290,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B5474C9F1D97050700B9AA17 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5474CA81D97050700B9AA17 /* ViewController.swift in Sources */,
+				B5474CA61D97050700B9AA17 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -231,6 +308,25 @@
 			targetProxy = B53AF94B1D8F41CF00E881DB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B5474CA91D97050700B9AA17 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5474CAA1D97050700B9AA17 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B5474CAE1D97050700B9AA17 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5474CAF1D97050700B9AA17 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		B53AF9521D8F41CF00E881DB /* Debug */ = {
@@ -399,6 +495,32 @@
 			};
 			name = Release;
 		};
+		B5474CB21D97050700B9AA17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8LHVT7DW44;
+				INFOPLIST_FILE = "FlubberView Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nicethings.FlubberView-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		B5474CB31D97050700B9AA17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8LHVT7DW44;
+				INFOPLIST_FILE = "FlubberView Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nicethings.FlubberView-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -418,12 +540,22 @@
 				B53AF9561D8F41CF00E881DB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B53AF9571D8F41CF00E881DB /* Build configuration list for PBXNativeTarget "FlubberViewTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B53AF9581D8F41CF00E881DB /* Debug */,
 				B53AF9591D8F41CF00E881DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5474CB41D97050700B9AA17 /* Build configuration list for PBXNativeTarget "FlubberView Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5474CB21D97050700B9AA17 /* Debug */,
+				B5474CB31D97050700B9AA17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
