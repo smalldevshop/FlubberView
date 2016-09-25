@@ -14,7 +14,6 @@ import UIKit
 //    private var viewSize: CGSize = CGSize.zero
 //    private var displayLink: CADisplayLink?
 //    private var viewLayer: CAShapeLayer = CAShapeLayer()
-//    private var elasticity: CGFloat = 0.0
 //    private var density: CGFloat = 0.0
 //    private var damping: CGFloat = 0.0
 //    private var frequency: CGFloat = 0.0
@@ -65,12 +64,6 @@ import UIKit
 //    convenience init(withFrame frame: CGRect,
 //                                   viewSize: CGSize,
 //                                   elasticity: CGFloat,
-//                                   density: CGFloat,
-//                                   damping: CGFloat,
-//                                   frequency: CGFloat) {
-//        self.init(frame: frame)
-//        layer.cornerRadius = Session.sharedInstance.cornerRadius
-//        self.viewSize = viewSize
 //        self.elasticity = elasticity
 //        self.density = density
 //        self.damping = damping
@@ -85,7 +78,7 @@ import UIKit
 //
 //    func show() {
 //        setupMainLayer()
-//        displayLink = CADisplayLink(target: self, selector: #selector(ElasticView.redraw))
+//        displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
 //        displayLink?.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
 //    }
 //

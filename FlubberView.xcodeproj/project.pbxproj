@@ -16,6 +16,8 @@
 		B5474CAB1D97050700B9AA17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5474CA91D97050700B9AA17 /* Main.storyboard */; };
 		B5474CAD1D97050700B9AA17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5474CAC1D97050700B9AA17 /* Assets.xcassets */; };
 		B5474CB01D97050700B9AA17 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5474CAE1D97050700B9AA17 /* LaunchScreen.storyboard */; };
+		B5474CB71D970ADD00B9AA17 /* Flubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5474CB51D970ADD00B9AA17 /* Flubber.swift */; };
+		B5474CB81D970ADD00B9AA17 /* UIView+Flubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5474CB61D970ADD00B9AA17 /* UIView+Flubber.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,8 @@
 		B5474CAC1D97050700B9AA17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B5474CAF1D97050700B9AA17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B5474CB11D97050700B9AA17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5474CB51D970ADD00B9AA17 /* Flubber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flubber.swift; sourceTree = "<group>"; };
+		B5474CB61D970ADD00B9AA17 /* UIView+Flubber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Flubber.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 				B53AF9431D8F41CE00E881DB /* FlubberView.h */,
 				B53AF9441D8F41CE00E881DB /* Info.plist */,
 				B53AF95A1D8F50C300E881DB /* FlubberView.swift */,
+				B5474CB51D970ADD00B9AA17 /* Flubber.swift */,
+				B5474CB61D970ADD00B9AA17 /* UIView+Flubber.swift */,
 			);
 			path = FlubberView;
 			sourceTree = "<group>";
@@ -278,6 +284,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5474CB81D970ADD00B9AA17 /* UIView+Flubber.swift in Sources */,
+				B5474CB71D970ADD00B9AA17 /* Flubber.swift in Sources */,
 				B53AF95B1D8F50C300E881DB /* FlubberView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -558,6 +566,7 @@
 				B5474CB31D97050700B9AA17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
