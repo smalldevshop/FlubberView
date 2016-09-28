@@ -9,88 +9,29 @@
 import Foundation
 import UIKit
 
-public protocol Numeric {
-    static func +(lhs: Self, rhs: Self) -> Self
-    static func -(lhs: Self, rhs: Self) -> Self
-    static func *(lhs: Self, rhs: Self) -> Self
-    static func /(lhs: Self, rhs: Self) -> Self
-}
-
-extension CGFloat: Numeric {}
-extension Int: Numeric {}
-extension Double: Numeric {}
-extension CGSize: Size {}
-
 public protocol Initializable {
     init()
 }
 
-public protocol Size: Initializable {
-
-    associatedtype NumericType: Numeric
-    
-    var width: NumericType { get set }
-    var height: NumericType { get set }
-
-    init(width: NumericType, height: NumericType)
-
-}
-
-extension Size {
-    
-    init(width: NumericType, height: NumericType) {
-        self.init()
-        self.width = width
-        self.height = height
-    }
-    
-}
-
-public protocol Graph {
-
-    associatedtype SizeType: Size
-
-    var nodeCount: Int { get set }
-    var size: SizeType { get set }
-
-    init(withNodeCount nodeCount: Int,
-         desiredSize: SizeType)
-    
+public enum NodeDensity {
+    case low, medium, high
 }
 
 public protocol ElasticConfigurable: Initializable {
 
-    var density: CGFloat { get set }
-    var damping: CGFloat { get set }
-    var frequency: CGFloat { get set }
-    var elasticity: CGFloat { get set }
-    var displayLink: CADisplayLink { get set }
-    var viewLayer: CAShapeLayer { get set }
+    var density: CGFloat { get }
+    var damping: CGFloat { get }
+    var frequency: CGFloat { get }
+    var elasticity: CGFloat { get }
+    var displayLink: CADisplayLink { get }
+    var viewLayer: CAShapeLayer { get }
     var mainAnimator: UIDynamicAnimator { get }
+    var nodeDensity: NodeDensity { get }
 
     init(withDensity density: CGFloat,
          damping: CGFloat,
          frequency: CGFloat,
          elasticity: CGFloat,
-         displayLink: CADisplayLink,
-         viewLayer: CAShapeLayer)
+         nodeDensity: NodeDensity)
 
-}
-
-public extension ElasticConfigurable {
-
-    init(withDensity density: CGFloat,
-         damping: CGFloat,
-         frequency: CGFloat,
-         elasticity: CGFloat,
-         displayLink: CADisplayLink,
-         viewLayer: CAShapeLayer) {
-        self.init()
-        self.density = density
-        self.frequency = frequency
-        self.elasticity = elasticity
-        self.displayLink = displayLink
-        self.viewLayer = viewLayer
-    }
-    
 }
