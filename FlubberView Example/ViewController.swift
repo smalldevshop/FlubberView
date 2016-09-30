@@ -12,7 +12,10 @@ import FlubberView
 class ViewController: UIViewController {
 
     var graphView = {
-        return GraphView(withDensity: 0.5, damping: 0.0, frequency: 6.0, elasticity: 1.0, nodeDensity: .low)
+        return GraphView(withDensity: 0.5,
+                         damping: 10.0,
+                         frequency: 16.0,
+                         nodeDensity: .medium)
     }()
 
     override func viewDidLoad() {

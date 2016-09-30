@@ -22,7 +22,6 @@ public protocol ElasticConfigurable: Initializable {
     var density: CGFloat { get }
     var damping: CGFloat { get }
     var frequency: CGFloat { get }
-    var elasticity: CGFloat { get }
     var displayLink: CADisplayLink { get }
     var viewLayer: CAShapeLayer { get }
     var mainAnimator: UIDynamicAnimator { get }
@@ -31,7 +30,6 @@ public protocol ElasticConfigurable: Initializable {
     init(withDensity density: CGFloat,
          damping: CGFloat,
          frequency: CGFloat,
-         elasticity: CGFloat,
          nodeDensity: NodeDensity)
 
 }

@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FlubberView/UIView+Flubber.swift"
-            timestampString = "496762192.120516"
+            timestampString = "496940228.96734"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
             landmarkName = "compose()"
             landmarkType = "7">
          </BreakpointContent>

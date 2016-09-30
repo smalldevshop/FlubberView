@@ -51,7 +51,6 @@ public final class GraphView: UIView {
     public var density: CGFloat = 0.0
     public var damping: CGFloat = 0.0
     public var frequency: CGFloat = 6.0
-    public var elasticity: CGFloat = 0.5
     public var displayLink: CADisplayLink = CADisplayLink()
     public var viewLayer: CAShapeLayer = CAShapeLayer()
     public var nodeDensity: NodeDensity = .medium
@@ -75,14 +74,12 @@ extension GraphView: ElasticConfigurable {
     public convenience init(withDensity density: CGFloat,
                             damping: CGFloat,
                             frequency: CGFloat,
-                            elasticity: CGFloat,
                             nodeDensity: NodeDensity = .medium) {
         self.init()
         self.density = density
         self.damping = damping
         self.frequency = frequency
-        self.elasticity = elasticity
-        self.nodeDensity = .high
+        self.nodeDensity = nodeDensity
         frame.size = CGSize(width: 150, height: 150)
         compose()
     }
@@ -132,7 +129,7 @@ public extension GraphView {
         for v in subviews {
             if v.tag % 2 == 0 {
                 let initialCenter = CGPoint(x: v.frame.midX, y: v.frame.midY)
-                v.center = CGPoint(x: v.center.x - 8, y: v.center.y - 8)
+                v.center = CGPoint(x: v.center.x <~> 8, y: v.center.y <~> 8)
                 let snapBehavior = UISnapBehavior(item: v, snapTo: initialCenter)
                 mainAnimator.addBehavior(snapBehavior)
                 mainAnimator.updateItem(usingCurrentState: v)
@@ -149,7 +146,7 @@ private extension GraphView {
         viewLayer.path = viewPath.cgPath
         viewLayer.fillColor = UIColor.yellow.cgColor
         viewLayer.cornerRadius = 5.0
-        layer.addSublayer(viewLayer)
+//        layer.addSublayer(viewLayer)
     }
 
     func compose() {
@@ -198,7 +195,6 @@ private extension GraphView {
                     mainAnimator.addBehavior(attach)
 
                     let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
-                    bh.elasticity = elasticity
                     bh.density = density
 
                     mainAnimator.addBehavior(bh)
