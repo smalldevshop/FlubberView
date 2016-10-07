@@ -11,10 +11,13 @@ import FlubberView
 
 class ViewController: UIViewController {
 
-    var flubberView = {
+    var flubberView = { () -> FlubberView in 
+        let layer = CAShapeLayer()
+        layer.fillColor = UIColor.yellow.cgColor
         return FlubberView(withDesiredSize: CGSize(width: 150, height: 150),
-                         damping: 5.0,
-                         frequency: 16.0,
+                         shapeLayer: layer,
+                         damping: 0.1,
+                         frequency: 2.0,
                          nodeDensity: .medium)
     }()
 

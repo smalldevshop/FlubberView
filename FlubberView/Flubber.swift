@@ -23,7 +23,7 @@ public enum NodeDensity {
     case low, medium, high
 }
 
-public protocol ElasticConfigurable: Initializable {
+protocol ElasticConfigurable: Initializable {
     
     /// The amount of damping to apply to individual nodes
     /// within the FlubberView
