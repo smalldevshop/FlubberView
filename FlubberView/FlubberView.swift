@@ -87,21 +87,19 @@ public extension FlubberView {
 
     func animate(withDampingQuotient dampingQuotient: DampingQuotient = .medium) {
         for v in subviews {
-            if v.tag % 2 == 0 {
-                let initialCenter = CGPoint(x: v.frame.midX, y: v.frame.midY)
-                let elasticity = dampingQuotient.elasticity
+            let initialCenter = CGPoint(x: v.frame.midX, y: v.frame.midY)
+            let elasticity = dampingQuotient.elasticity
 
 
-                v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
-                let snapBehavior = UISnapBehavior(item: v, snapTo: initialCenter)
-                DispatchQueue.main.asyncAfter(deadline: dampingQuotient.delay) {
-                    self.mainAnimator.addBehavior(snapBehavior)
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + FlubberView.snapRemovalDelay) {
-                        self.mainAnimator.removeBehavior(snapBehavior)
-                    }
+            v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
+            let snapBehavior = UISnapBehavior(item: v, snapTo: initialCenter)
+            DispatchQueue.main.asyncAfter(deadline: dampingQuotient.delay) {
+                self.mainAnimator.addBehavior(snapBehavior)
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + FlubberView.snapRemovalDelay) {
+                    self.mainAnimator.removeBehavior(snapBehavior)
                 }
-                mainAnimator.updateItem(usingCurrentState: v)
             }
+            mainAnimator.updateItem(usingCurrentState: v)
         }
     }
 
