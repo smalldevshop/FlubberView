@@ -11,9 +11,9 @@ import FlubberView
 
 class ViewController: UIViewController {
 
-    var graphView = {
-        return GraphView(withDensity: 0.5,
-                         damping: 10.0,
+    var flubberView = {
+        return FlubberView(withDesiredSize: CGSize(width: 150, height: 150),
+                         damping: 5.0,
                          frequency: 16.0,
                          nodeDensity: .medium)
     }()
@@ -22,21 +22,21 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .purple
-        graphView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(graphView)
-        let origin = CGPoint(x: view.frame.midX - 50, y: view.frame.midY - 50)
-        graphView.frame = CGRect(origin: origin, size: graphView.frame.size)
+        flubberView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(flubberView)
+        let origin = CGPoint(x: view.frame.midX - flubberView.frame.width / 2,
+                             y: view.frame.midY - flubberView.frame.height / 2)
+        flubberView.frame = CGRect(origin: origin, size: flubberView.frame.size)
         registerGestureRecognizers()
-        graphView.show()
     }
 
     func registerGestureRecognizers() -> Void {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
-        graphView.addGestureRecognizer(gestureRecognizer)
+        flubberView.addGestureRecognizer(gestureRecognizer)
     }
 
     func didTap() {
-        graphView.jiggle()
+        flubberView.animate()
     }
 
 }
