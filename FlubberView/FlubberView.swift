@@ -95,7 +95,7 @@ public extension FlubberView {
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialCenter)
             DispatchQueue.main.asyncAfter(deadline: dampingQuotient.delay) {
                 self.mainAnimator.addBehavior(snapBehavior)
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + FlubberView.snapRemovalDelay) {
+                DispatchQueue.main.asyncAfter(deadline: FlubberView.snapRemovalDelay) {
                     self.mainAnimator.removeBehavior(snapBehavior)
                 }
             }
@@ -107,8 +107,9 @@ public extension FlubberView {
 
 private extension FlubberView {
 
-    static let snapRemovalDelay: DispatchTimeInterval = DispatchTimeInterval.seconds(1)
-
+    static var snapRemovalDelay: DispatchTime {
+        return DispatchTime.now() + DispatchTimeInterval.seconds(1)
+    }
 
     /// The number of nodes contained inside the FlubberView
     var nodeCount: Int {
@@ -128,25 +129,25 @@ private extension FlubberView {
     var controlNodeIndices: [Int] {
         switch nodeDensity {
         case .low:
-            return [1,5,7,3]
+            return [1, 5, 7, 3]
         case .high:
-            return [2,27,45,21]
+            return [2, 27, 45, 21]
         default:
-            return [2,14,22,15]
+            return [2, 14, 22, 15]
         }
     }
 
 
-    /// A collection containing the indices of the subviews in 
+    /// A collection containing the indices of the subviews in
     /// the view's 4 corners
     var cornerNodeIndices: [Int] {
         switch nodeDensity {
         case .low:
-            return [0,2,8,6]
+            return [0, 2, 8, 6]
         case .high:
-            return [0,6,48,42]
+            return [0, 6, 48, 42]
         default:
-            return [0,4,24,20]
+            return [0, 4, 24, 20]
         }
     }
 
@@ -180,32 +181,48 @@ private extension FlubberView {
 
         // move to the top right corner through the center point of
         // the middle node subview of the top edge
-        bPath.addQuadCurve(to: topEdgeRight,
-                           controlPoint: subviews[controlNodeIndices[0]].center)
+        bPath.addQuadCurve(to: topEdgeRight, controlPoint: subviews[controlNodeIndices[0]].center)
         center = CGPoint(x: topEdgeRight.x,
-                             y: topEdgeRight.y )
-        bPath.addArc(withCenter: center, radius: 0.0,
+                         y: topEdgeRight.y )
+        bPath.addArc(withCenter: center,
+                     radius: 0.0,
                      startAngle: CGFloat(M_PI_2),
                      endAngle: 0,
                      clockwise: true)
 
         // move to the bottom right corner through the center point of
         // the middle node of the right edge
-        bPath.addQuadCurve(to: rightEdgeBottom, controlPoint: subviews[controlNodeIndices[1]].center)
-        center = CGPoint(x: rightEdgeBottom.x , y: rightEdgeBottom.y)
-        bPath.addArc(withCenter: center, radius: 0.0, startAngle: 0, endAngle: CGFloat(2 * M_PI_4), clockwise: true)
+        bPath.addQuadCurve(to: rightEdgeBottom,
+                           controlPoint: subviews[controlNodeIndices[1]].center)
+        center = CGPoint(x: rightEdgeBottom.x ,
+                         y: rightEdgeBottom.y)
+        bPath.addArc(withCenter: center,
+                     radius: 0.0,
+                     startAngle: 0,
+                     endAngle: CGFloat(2 * M_PI_4),
+                     clockwise: true)
 
         // move to the bottom left corner through the center point of
         // the middle node of the left edge
         bPath.addQuadCurve(to: bottomEdgeLeft, controlPoint: subviews[controlNodeIndices[2]].center)
-        center = CGPoint(x: bottomEdgeLeft.x, y: bottomEdgeLeft.y )
-        bPath.addArc(withCenter: center, radius: 0.0, startAngle: CGFloat(-M_PI_4), endAngle: CGFloat(M_PI), clockwise: true)
+        center = CGPoint(x: bottomEdgeLeft.x,
+                         y: bottomEdgeLeft.y )
+        bPath.addArc(withCenter: center,
+                     radius: 0.0,
+                     startAngle: CGFloat(-M_PI_4),
+                     endAngle: CGFloat(M_PI),
+                     clockwise: true)
 
         // move to the top left corner through the center point of
         // the middle node of the left edge
         bPath.addQuadCurve(to: topEdgeLeft, controlPoint: subviews[controlNodeIndices[3]].center)
-        center = CGPoint(x: topEdgeLeft.x , y: topEdgeLeft.y)
-        bPath.addArc(withCenter: center, radius: 0.0, startAngle: CGFloat(M_PI), endAngle: CGFloat(M_PI_2), clockwise: true)
+        center = CGPoint(x: topEdgeLeft.x ,
+                         y: topEdgeLeft.y)
+        bPath.addArc(withCenter: center,
+                     radius: 0.0,
+                     startAngle: CGFloat(M_PI),
+                     endAngle: CGFloat(M_PI_2),
+                     clockwise: true)
 
         return bPath
     }
@@ -254,7 +271,7 @@ private extension FlubberView {
 
 
 
-    /// Bind all subviews to their (horizontally or vertically) adjacent views using 
+    /// Binds all subviews to their (horizontally or vertically) adjacent views using
     /// a UIAttachmentBehavior
     func attachViews() {
 
@@ -288,6 +305,12 @@ private extension FlubberView {
 
 private extension CGFloat {
 
+
+    /// Calculates the distance that should separate each node
+    ///
+    /// - parameter nodeCount: the number of nodes contained in the FlubberView
+    ///
+    /// - returns: the distance that should separate the nodes in the FlubberView
     func separation(for nodeCount: Int) -> CGFloat {
         return self / CGFloat(nodeCount - 1)
     }
@@ -296,6 +319,8 @@ private extension CGFloat {
 
 private extension CGSize {
 
+    /// A coordinate pair representintg the distance from
+    /// any edge of a CGRect of a given size to the center
     var distanceToCenter: (CGFloat, CGFloat) {
        return (width/2 - width/2, height/2 - height/2)
     }

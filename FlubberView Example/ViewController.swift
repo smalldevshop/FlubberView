@@ -11,7 +11,7 @@ import FlubberView
 
 class ViewController: UIViewController {
 
-    var flubberView = { () -> FlubberView in 
+    var flubberView = { () -> FlubberView in
         let layer = CAShapeLayer()
         layer.fillColor = UIColor.yellow.cgColor
         return FlubberView(withDesiredSize: CGSize(width: 150, height: 150),
@@ -43,4 +43,3 @@ class ViewController: UIViewController {
     }
 
 }
-

@@ -13,7 +13,7 @@ public protocol Initializable {
 }
 
 
-/// Used to specify the number of nodes to be 
+/// Used to specify the number of nodes to be
 /// distributed inside the FlubberView
 ///
 /// - low:    9 nodes total
@@ -24,11 +24,11 @@ public enum NodeDensity {
 }
 
 protocol ElasticConfigurable: Initializable {
-    
+
     /// The amount of damping to apply to individual nodes
     /// within the FlubberView
     var damping: CGFloat { get }
-    
+
     /// The frequency of oscillation for the attachment behavior
     /// that connects individual nodes within the FlubberView
     var frequency: CGFloat { get }
@@ -40,7 +40,7 @@ protocol ElasticConfigurable: Initializable {
     /// The layer that sits on top of the frame of the FlubberView
     var shapeLayer: CAShapeLayer? { get }
 
-    /// The mainAnimator provides physics-related animations to 
+    /// The mainAnimator provides physics-related animations to
     /// the FlubberView, which is its referenceView
     var mainAnimator: UIDynamicAnimator { get }
 

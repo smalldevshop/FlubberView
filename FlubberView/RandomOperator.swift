@@ -12,7 +12,7 @@ precedencegroup normal {
     associativity: left
 }
 
-func <~>(lhs: CGFloat, rhs: CGFloat) -> CGFloat {
+func <~> (lhs: CGFloat, rhs: CGFloat) -> CGFloat {
 
     return arc4random_uniform(2) == 0 ? lhs - rhs : lhs + rhs
 
