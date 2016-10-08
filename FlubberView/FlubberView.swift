@@ -50,9 +50,13 @@ extension FlubberView: ElasticConfigurable {
 
 public extension FlubberView {
 
+
+    /// Controls the elasticity of the individual nodes within the
+    /// FlubberView, and the length of the animation
     enum DampingQuotient {
         case low, medium, high
 
+        /// The distance each node will move while animating
         var elasticity: CGFloat {
             let elasticity: CGFloat
             switch self {
@@ -63,11 +67,13 @@ public extension FlubberView {
             return elasticity
         }
 
+        /// The time interval between the start of an animation and when all
+        /// nodes reset to their original position
         var delay: DispatchTime {
             let delay: DispatchTime
             switch self {
-            case .low: delay = DispatchTime.now() + DispatchTimeInterval.seconds(1)
-            case .medium: delay = DispatchTime.now() + DispatchTimeInterval.seconds(1)
+            case .low: delay = DispatchTime.now() + DispatchTimeInterval.seconds(4)
+            case .medium: delay = DispatchTime.now() + DispatchTimeInterval.seconds(2)
             case .high: delay = DispatchTime.now() + DispatchTimeInterval.seconds(1)
             }
             return delay
@@ -85,6 +91,10 @@ public extension FlubberView {
         shapeLayer?.path = viewPath.cgPath
     }
 
+    /// Repositions all nodes within the FlubberView, and snaps
+    /// them back to their original position after a delay
+    ///
+    /// - parameter dampingQuotient: <#dampingQuotient description#>
     func animate(withDampingQuotient dampingQuotient: DampingQuotient = .medium) {
         for v in subviews {
             let initialCenter = CGPoint(x: v.frame.midX, y: v.frame.midY)
@@ -286,10 +296,8 @@ private extension FlubberView {
                     let attach: UIAttachmentBehavior = UIAttachmentBehavior(item: view,
                                                                             attachedTo: nextView)
 
-                    /// % of energy lost PER OSCILLATION (how "stiff" the spring is)
                     attach.damping = damping
 
-                    /// oscilattions per second
                     attach.frequency = frequency
                     mainAnimator.addBehavior(attach)
 
@@ -304,7 +312,6 @@ private extension FlubberView {
 }
 
 private extension CGFloat {
-
 
     /// Calculates the distance that should separate each node
     ///

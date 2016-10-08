@@ -25,12 +25,13 @@ public enum NodeDensity {
 
 protocol ElasticConfigurable: Initializable {
 
-    /// The amount of damping to apply to individual nodes
-    /// within the FlubberView
+    /// The amount of damping (energy lost per oscillation)
+    /// to apply to individual nodes within the FlubberView
     var damping: CGFloat { get }
 
-    /// The frequency of oscillation for the attachment behavior
-    /// that connects individual nodes within the FlubberView
+    /// The frequency of oscillation (oscillations per second)
+    /// for the attachment behavior that connects individual nodes
+    /// within the FlubberView
     var frequency: CGFloat { get }
 
     /// A CADisplayLink instance to handle redrawing the FlubberView

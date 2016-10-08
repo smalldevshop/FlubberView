@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FlubberView/FlubberView.swift"
-            timestampString = "497575435.543239"
+            timestampString = "497643207.590517"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "animate(withDampingQuotient:)"
             landmarkType = "7">
          </BreakpointContent>
