@@ -10,6 +10,10 @@ import UIKit
 
 public final class FlubberView: UIView {
 
+    /// Controls the distance that each node (subview)
+    /// will move during the animation
+    public var magnitude: Magnitude = .low
+
     // MARK: ElasticConfigurable
 
     var displayLink: CADisplayLink = CADisplayLink()
@@ -53,7 +57,7 @@ public extension FlubberView {
 
     /// Controls the elasticity of the individual nodes within the
     /// FlubberView, and the length of the animation
-    enum DampingQuotient {
+    enum Magnitude {
         case low, medium, high
 
         /// The distance each node will move while animating
@@ -94,19 +98,21 @@ public extension FlubberView {
     /// Repositions all nodes within the FlubberView, and snaps
     /// them back to their original position after a delay
     ///
-    /// - parameter dampingQuotient: <#dampingQuotient description#>
-    func animate(withDampingQuotient dampingQuotient: DampingQuotient = .medium) {
+    /// - parameter magnitude: controls the distance that each node
+    /// will move during the animation
+    func animate() {
+        isUserInteractionEnabled = false
         for v in subviews {
             let initialCenter = CGPoint(x: v.frame.midX, y: v.frame.midY)
-            let elasticity = dampingQuotient.elasticity
-
+            let elasticity = magnitude.elasticity
 
             v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialCenter)
-            DispatchQueue.main.asyncAfter(deadline: dampingQuotient.delay) {
+            DispatchQueue.main.asyncAfter(deadline: magnitude.delay) {
                 self.mainAnimator.addBehavior(snapBehavior)
                 DispatchQueue.main.asyncAfter(deadline: FlubberView.snapRemovalDelay) {
                     self.mainAnimator.removeBehavior(snapBehavior)
+                    self.isUserInteractionEnabled = true
                 }
             }
             mainAnimator.updateItem(usingCurrentState: v)

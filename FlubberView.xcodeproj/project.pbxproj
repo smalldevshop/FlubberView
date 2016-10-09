@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B513505C1D9849FA00A5487F /* FlubberView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53AF9401D8F41CE00E881DB /* FlubberView.framework */; };
 		B513505D1D9849FA00A5487F /* FlubberView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B53AF9401D8F41CE00E881DB /* FlubberView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B51881C81DAA7DEE00F783BC /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51881C71DAA7DEE00F783BC /* Slider.swift */; };
 		B53AF94A1D8F41CF00E881DB /* FlubberView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53AF9401D8F41CE00E881DB /* FlubberView.framework */; };
 		B53AF94F1D8F41CF00E881DB /* FlubberViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53AF94E1D8F41CF00E881DB /* FlubberViewTests.swift */; };
 		B53AF9511D8F41CF00E881DB /* FlubberView.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AF9431D8F41CE00E881DB /* FlubberView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -54,6 +55,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B51881C71DAA7DEE00F783BC /* Slider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		B53AF9401D8F41CE00E881DB /* FlubberView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlubberView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B53AF9431D8F41CE00E881DB /* FlubberView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlubberView.h; sourceTree = "<group>"; };
 		B53AF9441D8F41CE00E881DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			children = (
 				B5474CA51D97050700B9AA17 /* AppDelegate.swift */,
 				B5474CA71D97050700B9AA17 /* ViewController.swift */,
+				B51881C71DAA7DEE00F783BC /* Slider.swift */,
 				B5474CA91D97050700B9AA17 /* Main.storyboard */,
 				B5474CAC1D97050700B9AA17 /* Assets.xcassets */,
 				B5474CAE1D97050700B9AA17 /* LaunchScreen.storyboard */,
@@ -347,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5474CA81D97050700B9AA17 /* ViewController.swift in Sources */,
+				B51881C81DAA7DEE00F783BC /* Slider.swift in Sources */,
 				B5474CA61D97050700B9AA17 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
