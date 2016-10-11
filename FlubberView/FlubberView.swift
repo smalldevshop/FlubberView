@@ -14,7 +14,11 @@ public final class FlubberView: UIView {
     /// will move during the animation
     public var magnitude: Magnitude = .medium
 
+    /// Storage for the attachment behaviors belonging to individual subviews
     var behaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
+
+    /// Storage for the initial origin coordinates of each individual subview
+    var nodeCenterCoordinates: Dictionary<UIView, CGPoint> = Dictionary()
 
     // MARK: ElasticConfigurable
 
@@ -103,9 +107,9 @@ public extension FlubberView {
     /// will move during the animation
     func animate() {
         for v in subviews {
-            let initialCenter = CGPoint(x: v.frame.midX, y: v.frame.midY)
+            let initialPoint = nodeCenterCoordinates[v] ?? CGPoint(x: v.frame.midX, y: v.frame.midY)
             let elasticity = magnitude.elasticity
-            let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialCenter)
+            let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
 
             bounceBehavior.length = 2
             bounceBehavior.damping = damping
@@ -282,6 +286,7 @@ private extension FlubberView {
                 let childView = UIView(frame: childViewRect)
 
                 childView.tag = tag
+                nodeCenterCoordinates[childView] = childView.frame.origin
                 addSubview(childView)
                 tag += 1
             }
