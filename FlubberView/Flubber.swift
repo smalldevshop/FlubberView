@@ -27,12 +27,12 @@ protocol ElasticConfigurable: Initializable {
 
     /// The amount of damping (energy lost per oscillation)
     /// to apply to individual nodes within the FlubberView
-    var damping: CGFloat { get }
+    var damping: CGFloat { get set }
 
     /// The frequency of oscillation (oscillations per second)
     /// for the attachment behavior that connects individual nodes
     /// within the FlubberView
-    var frequency: CGFloat { get }
+    var frequency: CGFloat { get set }
 
     /// A CADisplayLink instance to handle redrawing the FlubberView
     /// at regular intervals

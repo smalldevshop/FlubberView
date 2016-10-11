@@ -11,8 +11,7 @@ import FlubberView
 
 class Slider: UISlider {
 
-    var labels: [UILabel] = []
-    var flubberView: FlubberView?
+    var callBack: ((CGFloat) -> ())?
 
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         super.beginTracking(touch, with: event)
@@ -27,22 +26,6 @@ class Slider: UISlider {
     }
 
     func highLightLabel(forTouchLocation touchLocation: CGFloat) -> Void {
-        switch touchLocation {
-        case let location where location < frame.size.width / 3:
-            labels[0].textColor = .green
-            labels[1].textColor = .white
-            labels[2].textColor = .white
-            flubberView?.magnitude = .low
-        case let location where location > (2 * (frame.size.width / 3)):
-            labels[0].textColor = .white
-            labels[1].textColor = .white
-            labels[2].textColor = .green
-            flubberView?.magnitude = .high
-        default:
-            labels[0].textColor = .white
-            labels[1].textColor = .green
-            labels[2].textColor = .white
-            flubberView?.magnitude = .medium
-        }
+        callBack?(max(0.0, CGFloat(touchLocation / frame.size.width)))
     }
 }

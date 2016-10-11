@@ -16,16 +16,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FlubberView/FlubberView.swift"
-            timestampString = "497732461.122772"
+            filePath = "FlubberView Example/Slider.swift"
+            timestampString = "497839959.25704"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "animate(withMagnitude:)"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "highLightLabel(forTouchLocation:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

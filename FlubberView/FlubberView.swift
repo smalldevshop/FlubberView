@@ -12,14 +12,16 @@ public final class FlubberView: UIView {
 
     /// Controls the distance that each node (subview)
     /// will move during the animation
-    public var magnitude: Magnitude = .low
+    public var magnitude: Magnitude = .medium
+
+    var behaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
 
     // MARK: ElasticConfigurable
 
     var displayLink: CADisplayLink = CADisplayLink()
     var shapeLayer: CAShapeLayer?
-    var frequency: CGFloat = 0.0
-    var damping: CGFloat = 0.0
+    public var frequency: CGFloat = 0.0
+    public var damping: CGFloat = 0.0
     var nodeDensity: NodeDensity = .medium
     lazy var mainAnimator: UIDynamicAnimator = {
         return UIDynamicAnimator(referenceView: self)
@@ -53,7 +55,6 @@ extension FlubberView: ElasticConfigurable {
 }
 
 public extension FlubberView {
-
 
     /// Controls the elasticity of the individual nodes within the
     /// FlubberView, and the length of the animation
@@ -101,20 +102,24 @@ public extension FlubberView {
     /// - parameter magnitude: controls the distance that each node
     /// will move during the animation
     func animate() {
-        isUserInteractionEnabled = false
         for v in subviews {
             let initialCenter = CGPoint(x: v.frame.midX, y: v.frame.midY)
             let elasticity = magnitude.elasticity
+            let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialCenter)
 
-            v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
-            let snapBehavior = UISnapBehavior(item: v, snapTo: initialCenter)
-            DispatchQueue.main.asyncAfter(deadline: magnitude.delay) {
-                self.mainAnimator.addBehavior(snapBehavior)
-                DispatchQueue.main.asyncAfter(deadline: FlubberView.snapRemovalDelay) {
-                    self.mainAnimator.removeBehavior(snapBehavior)
-                    self.isUserInteractionEnabled = true
-                }
+            bounceBehavior.length = 2
+            bounceBehavior.damping = damping
+            bounceBehavior.frequency = frequency
+
+            let oldBehavior = behaviors.object(forKey: v)
+            behaviors.setObject(bounceBehavior, forKey: v)
+
+            if let behavior = oldBehavior {
+                mainAnimator.removeBehavior(behavior)
             }
+
+            mainAnimator.addBehavior(bounceBehavior)
+            v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
             mainAnimator.updateItem(usingCurrentState: v)
         }
     }
@@ -277,7 +282,6 @@ private extension FlubberView {
                 let childView = UIView(frame: childViewRect)
 
                 childView.tag = tag
-                childView.backgroundColor = .green
                 addSubview(childView)
                 tag += 1
             }
@@ -303,8 +307,8 @@ private extension FlubberView {
                                                                             attachedTo: nextView)
 
                     attach.damping = damping
-
                     attach.frequency = frequency
+
                     mainAnimator.addBehavior(attach)
 
                     let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
