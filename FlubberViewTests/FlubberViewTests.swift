@@ -13,19 +13,33 @@ class FlubberViewTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before
-        // the invocation of each test method in the class.
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after
-        // the invocation of each test method in the class.
         super.tearDown()
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testNodeCount() {
+
+        let flubberView = FlubberView(withDesiredSize: CGSize.zero,
+                                      damping: 0.0,
+                                      frequency: 0.0)
+
+        // nodeDensity should defulat to .medium
+        XCTAssert(flubberView.nodeDensity == .medium)
+
+        // nodeDensity = .low should correspond to 9 total subviews
+        flubberView.nodeDensity = .low
+        XCTAssertEqual(flubberView.subviews.count, 9)
+
+        // nodeDensity = .medium should correspond to 25 total subviews
+        flubberView.nodeDensity = .medium
+        XCTAssertEqual(flubberView.subviews.count, 25)
+
+        // nodeDensity = .high should correspond to 49 total subviews
+        flubberView.nodeDensity = .high
+        XCTAssertEqual(flubberView.subviews.count, 49)
+        
     }
 
     func testPerformanceExample() {

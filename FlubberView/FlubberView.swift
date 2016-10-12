@@ -26,7 +26,12 @@ public final class FlubberView: UIView {
     var shapeLayer: CAShapeLayer?
     public var frequency: CGFloat = 0.0
     public var damping: CGFloat = 0.0
-    var nodeDensity: NodeDensity = .medium
+    var nodeDensity: NodeDensity = .medium {
+        didSet {
+            subviews.forEach({ $0.removeFromSuperview() })
+            compose()
+        }
+    }
     lazy var mainAnimator: UIDynamicAnimator = {
         return UIDynamicAnimator(referenceView: self)
     }()
