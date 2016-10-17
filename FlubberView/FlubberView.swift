@@ -279,7 +279,6 @@ private extension FlubberView {
                 childView.tag = tag
                 nodeCenterCoordinates.setObject(NSValue(cgPoint: childView.frame.origin),
                                                 forKey: childView)
-                childView.backgroundColor = .green
                 addSubview(childView)
                 tag += 1
             }

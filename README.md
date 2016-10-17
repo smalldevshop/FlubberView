@@ -1,28 +1,31 @@
 # FlubberView
-A `UIView` subclass with the ability to jiggle and flop in the manner of Flubber.
+A very special `UIView` subclass.
 
-[![Build Status](https://travis-ci.org/NiceThings/Mondrian.svg?branch=develop)](https://travis-ci.org/NiceThings/FlubberView)
+[![Build Status](https://travis-ci.org/NiceThings/FlubberView.svg?branch=develop)](https://travis-ci.org/NiceThings/FlubberView)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 -------------
 
 ## Installation with Carthage
 
-BonMot is compatible with [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your Cartfile:
+FlubberView is compatible with [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your Cartfile:
 
 ```
 github "NiceThings/FlubberView"
 ```
 
 ## Design
-composed of equidistant subviews...
+FlubberView consists of a `UIView` and a collection of `subviews` arranged in a grid. Each subview is attached to the 2 views immediately horizontally adjacent to it with a `UIAttachmentBehavior`.
+
+The `animate()` function repositions each subview, causing the grid to jiggle and eventually settle. 
+
 
 <br/>
 <p align="center" >
 <img style="width: 20%; display: inline-block" src="https://raw.github.com/nicethings/flubberview/master/nodes.gif" alt="Overview" />
 <br/>
 </p>
-...and you can even pass in a layer:
+A `CAShapeLayer` can be passed into the constructor to give your `FlubberView` coherent shape.
 <br/>
 <p align="center" >
 
@@ -49,4 +52,4 @@ Trigger your `FlubberView`'s animation by calling `animate()`
 
 ### Inspiration
 
-`FlubberView` was inspired by @victorBaro's mighty [VBFJellyView](https://github.com/victorBaro/VBFJellyView)
+`FlubberView` was inspired by [victorBaro](https://github.com/victorBaro)'s mighty [VBFJellyView](https://github.com/victorBaro/VBFJellyView)
