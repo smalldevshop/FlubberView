@@ -15,6 +15,20 @@ github "NiceThings/FlubberView"
 ```
 
 ## Design
+composed of equidistant subviews...
+
+<br/>
+<p align="center" >
+<img style="width: 20%; display: inline-block" src="https://raw.github.com/nicethings/flubberview/master/nodes.gif" alt="Overview" />
+<br/>
+</p>
+...and you can even pass in a layer:
+<br/>
+<p align="center" >
+
+<img style="width: 20%; display: inline-block; padding-right: 20px" src="https://raw.github.com/nicethings/flubberview/master/layer.gif" style="display: inline-block" alt="Overview" />
+</p>
+<br/>
 
 ## Usage
 
