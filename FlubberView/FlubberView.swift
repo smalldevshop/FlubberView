@@ -18,7 +18,7 @@ public final class FlubberView: UIView {
     var behaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
 
     /// Storage for the initial origin coordinates of each individual subview
-    var nodeCenterCoordinates: Dictionary<UIView, CGPoint> = Dictionary()
+    var nodeCenterCoordinates: NSMapTable<UIView, NSValue> = NSMapTable()
 
     // MARK: ElasticConfigurable
 
@@ -81,17 +81,6 @@ public extension FlubberView {
             return elasticity
         }
 
-        /// The time interval between the start of an animation and when all
-        /// nodes reset to their original position
-        var delay: DispatchTime {
-            let delay: DispatchTime
-            switch self {
-            case .low: delay = DispatchTime.now() + DispatchTimeInterval.seconds(4)
-            case .medium: delay = DispatchTime.now() + DispatchTimeInterval.seconds(2)
-            case .high: delay = DispatchTime.now() + DispatchTimeInterval.seconds(1)
-            }
-            return delay
-        }
     }
 
     public override func didMoveToSuperview() {
@@ -112,7 +101,8 @@ public extension FlubberView {
     /// will move during the animation
     func animate() {
         for v in subviews {
-            let initialPoint = nodeCenterCoordinates[v] ?? CGPoint(x: v.frame.midX, y: v.frame.midY)
+            let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
+                CGPoint(x: v.frame.midX, y: v.frame.midY)
             let elasticity = magnitude.elasticity
             let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
 
@@ -136,10 +126,6 @@ public extension FlubberView {
 }
 
 private extension FlubberView {
-
-    static var snapRemovalDelay: DispatchTime {
-        return DispatchTime.now() + DispatchTimeInterval.seconds(1)
-    }
 
     /// The number of nodes contained inside the FlubberView
     var nodeCount: Int {
@@ -291,7 +277,8 @@ private extension FlubberView {
                 let childView = UIView(frame: childViewRect)
 
                 childView.tag = tag
-                nodeCenterCoordinates[childView] = childView.frame.origin
+                nodeCenterCoordinates.setObject(NSValue(cgPoint: childView.frame.origin),
+                                                forKey: childView)
                 addSubview(childView)
                 tag += 1
             }

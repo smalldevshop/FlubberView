@@ -19,6 +19,38 @@ class FlubberViewTests: XCTestCase {
         super.tearDown()
     }
 
+    func testNodeDistribution() {
+
+        let size = CGSize(width: 120, height: 120)
+        let flubberViewMediumDensity = FlubberView(withDesiredSize: size, damping: 0.0, frequency: 0.0)
+        let flubberViewLowDensity = FlubberView(withDesiredSize: size, damping: 0.0, frequency: 0.0, nodeDensity: .low)
+        let flubberViewHighDensity = FlubberView(withDesiredSize: size, damping: 0.0, frequency: 0.0, nodeDensity: .high)
+
+        loopOverNodes(flubberView: flubberViewLowDensity, nodesPerRow: 3, distanceBetweenNodes: 60.0)
+        loopOverNodes(flubberView: flubberViewMediumDensity, nodesPerRow: 5, distanceBetweenNodes: 30.0)
+        loopOverNodes(flubberView: flubberViewHighDensity, nodesPerRow: 7, distanceBetweenNodes: 20.0)
+
+    }
+
+    func testTableFlushing() {
+
+        // Behaviors should not accumulate accross
+        // multiple animation runs
+        
+        let flubberView = FlubberView(withDesiredSize: CGSize.zero,
+                                      damping: 0.0,
+                                      frequency: 0.0)
+
+        flubberView.animate()
+        let behaviorCount = flubberView.mainAnimator.behaviors.count
+
+        for _ in 0..<4 {
+            flubberView.animate()
+            XCTAssertEqual(behaviorCount, flubberView.mainAnimator.behaviors.count)
+        }
+        
+    }
+
     func testNodeCount() {
 
         let flubberView = FlubberView(withDesiredSize: CGSize.zero,
@@ -42,11 +74,21 @@ class FlubberViewTests: XCTestCase {
         
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func loopOverNodes(flubberView: FlubberView, nodesPerRow: Int, distanceBetweenNodes: CGFloat) {
+        var current = CGPoint.zero
+        var nodeCount = 0
+        flubberView.subviews.forEach({ node in
+            let horizDistance = node.frame.origin.x - current.x
+            let vertDistance = node.frame.origin.y - current.y
+            let distance = sqrt((horizDistance * horizDistance) + (vertDistance * vertDistance))
+
+            if nodeCount % nodesPerRow != 0 {
+                XCTAssert(distance == distanceBetweenNodes)
+            }
+            
+            current = node.frame.origin
+            nodeCount += 1
+        })
     }
 
 }
