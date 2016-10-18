@@ -43,38 +43,6 @@
             endingLineNumber = "83"
             landmarkName = "loopOverNodes(flubberView:nodesPerRow:distanceBetweenNodes:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "FlubberViewTests.FlubberViewTests.(loopOverNodes (flubberView : FlubberView.FlubberView, nodesPerRow : Swift.Int, distanceBetweenNodes : CoreGraphics.CGFloat) -&gt; ()).(closure #1)"
-                  moduleName = "FlubberViewTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/matthewbuckley/NiceThings/FlubberView/FlubberViewTests/FlubberViewTests.swift"
-                  timestampString = "498102986.596439"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
-                  offsetFromSymbolStart = "1063">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "FlubberViewTests.FlubberViewTests.(loopOverNodes (flubberView : FlubberView.FlubberView, nodesPerRow : Swift.Int, distanceBetweenNodes : CoreGraphics.CGFloat) -&gt; ()).(closure #1).(implicit closure #2)"
-                  moduleName = "FlubberViewTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/matthewbuckley/NiceThings/FlubberView/FlubberViewTests/FlubberViewTests.swift"
-                  timestampString = "498102986.598289"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
-                  offsetFromSymbolStart = "18">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
