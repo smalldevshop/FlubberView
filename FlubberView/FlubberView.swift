@@ -24,12 +24,19 @@ public final class FlubberView: UIView {
 
     var displayLink: CADisplayLink = CADisplayLink()
     var shapeLayer: CAShapeLayer?
-    public var frequency: CGFloat = 0.0
-    public var damping: CGFloat = 0.0
+    public var frequency: CGFloat = 0.0 {
+        didSet {
+            reset()
+        }
+    }
+    public var damping: CGFloat = 0.0 {
+        didSet {
+            reset()
+        }
+    }
     var nodeDensity: NodeDensity = .medium {
         didSet {
-            subviews.forEach({ $0.removeFromSuperview() })
-            compose()
+            reset()
         }
     }
     lazy var mainAnimator: UIDynamicAnimator = {
@@ -106,7 +113,6 @@ public extension FlubberView {
             let elasticity = magnitude.elasticity
             let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
 
-            bounceBehavior.length = 2
             bounceBehavior.damping = damping
             bounceBehavior.frequency = frequency
 
@@ -321,6 +327,11 @@ private extension FlubberView {
                 }
             }
         }
+    }
+
+    func reset() {
+        subviews.forEach({ $0.removeFromSuperview() })
+        compose()
     }
 
 }
