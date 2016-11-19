@@ -8,7 +8,49 @@
 
 import UIKit
 
-public final class FlubberView: UIView {
+public struct EdgeSet: OptionSet {
+
+    public var rawValue: UInt
+
+    public init(rawValue: UInt) {
+        self.rawValue = rawValue
+    }
+
+    public static let left: EdgeSet = EdgeSet(rawValue: 0)
+    public static let top: EdgeSet = EdgeSet(rawValue: 1 << 0)
+    public static let right: EdgeSet = EdgeSet(rawValue: 2 << 0)
+    public static let bottom: EdgeSet = EdgeSet(rawValue: 3 << 0)
+
+}
+
+open class FlubberView: UIView {
+
+    public var lockedEdges: [EdgeSet] = []
+
+    var lockedNodes: [UIView] {
+        var nodes: [UIView] = []
+        if lockedEdges.contains(EdgeSet.left) {
+            nodes = nodes + [subviews[cornerNodeIndices[0]],
+                             subviews[controlNodeIndices[3]],
+                             subviews[cornerNodeIndices[3]]]
+        }
+        if lockedEdges.contains(EdgeSet.top) {
+            nodes = nodes + [subviews[cornerNodeIndices[0]],
+                             subviews[controlNodeIndices[0]],
+                             subviews[cornerNodeIndices[1]]]
+        }
+        if lockedEdges.contains(EdgeSet.right) {
+            nodes = nodes + [subviews[cornerNodeIndices[1]],
+                             subviews[controlNodeIndices[1]],
+                             subviews[cornerNodeIndices[2]]]
+        }
+        if lockedEdges.contains(EdgeSet.bottom) {
+            nodes = nodes + [subviews[cornerNodeIndices[2]],
+                             subviews[controlNodeIndices[2]],
+                             subviews[cornerNodeIndices[3]]]
+        }
+        return nodes
+    }
 
     /// Controls the distance that each node (subview)
     /// will move during the animation
@@ -43,31 +85,40 @@ public final class FlubberView: UIView {
         return UIDynamicAnimator(referenceView: self)
     }()
 
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    open override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        setupMainLayer()
+        displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
+        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
     }
 
-}
+    // MARK: ElasticConfigurable
 
-extension FlubberView: ElasticConfigurable {
-
-    public convenience init(withDesiredSize desiredSize: CGSize,
+    public required init(withDesiredSize desiredSize: CGSize,
                             shapeLayer: CAShapeLayer? = nil,
                             damping: CGFloat,
                             frequency: CGFloat,
-                            nodeDensity: NodeDensity = .medium) {
+                            nodeDensity: NodeDensity = .medium,
+                            lockedEdges: [EdgeSet] = []) {
         self.init()
         self.damping = damping
         self.shapeLayer = shapeLayer
         self.frequency = frequency
-        self.nodeDensity = nodeDensity
+        self.nodeDensity = .low
+        self.lockedEdges = lockedEdges
         frame.size = desiredSize
         compose()
     }
+
+
 }
 
 public extension FlubberView {
@@ -90,13 +141,6 @@ public extension FlubberView {
 
     }
 
-    public override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        setupMainLayer()
-        displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
-        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
-    }
-
     func redraw() {
         shapeLayer?.path = viewPath.cgPath
     }
@@ -108,24 +152,26 @@ public extension FlubberView {
     /// will move during the animation
     func animate() {
         for v in subviews {
-            let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
-                CGPoint(x: v.frame.midX, y: v.frame.midY)
-            let elasticity = magnitude.elasticity
-            let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
+            if !lockedNodes.contains(v) {
+                let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
+                    CGPoint(x: v.frame.midX, y: v.frame.midY)
+                let elasticity = magnitude.elasticity
+                let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
 
-            bounceBehavior.damping = damping
-            bounceBehavior.frequency = frequency
+                bounceBehavior.damping = damping
+                bounceBehavior.frequency = frequency
 
-            let oldBehavior = behaviors.object(forKey: v)
-            behaviors.setObject(bounceBehavior, forKey: v)
+                let oldBehavior = behaviors.object(forKey: v)
+                behaviors.setObject(bounceBehavior, forKey: v)
 
-            if let behavior = oldBehavior {
-                mainAnimator.removeBehavior(behavior)
+                if let behavior = oldBehavior {
+                    mainAnimator.removeBehavior(behavior)
+                }
+
+                mainAnimator.addBehavior(bounceBehavior)
+                v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
+                mainAnimator.updateItem(usingCurrentState: v)
             }
-
-            mainAnimator.addBehavior(bounceBehavior)
-            v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
-            mainAnimator.updateItem(usingCurrentState: v)
         }
     }
 
@@ -157,6 +203,39 @@ private extension FlubberView {
         default:
             return [2, 14, 22, 15]
         }
+    }
+
+    var edgeIndices: [Int] {
+        var indices: [Int] = []
+        switch (lockedEdges, nodeDensity) {
+        case let (e, d) where e.contains(EdgeSet.left) && d == .low:
+            indices = indices + [6, 3, 0]
+        case let (e, d) where e.contains(EdgeSet.top) && d == .low:
+            indices = indices + [0, 1, 2]
+        case let (e, d) where e.contains(EdgeSet.right) && d == .low:
+            indices = indices + [2, 5, 8]
+        case let (e, d) where e.contains(EdgeSet.bottom) && d == .low:
+            indices = indices + [6, 7, 8]
+        case let (e, d) where e.contains(EdgeSet.left) && d == .medium:
+            indices = indices + [0, 5, 10, 15, 20]
+        case let (e, d) where e.contains(EdgeSet.top) && d == .medium:
+            indices = indices + [0, 1, 2, 3, 4]
+        case let (e, d) where e.contains(EdgeSet.right) && d == .medium:
+            indices = indices + [4, 9, 14, 19, 24]
+        case let (e, d) where e.contains(EdgeSet.bottom) && d == .medium:
+            indices = indices + [20, 21, 22, 23, 24]
+        case let (e, d) where e.contains(EdgeSet.left) && d == .high:
+            indices = indices + [0, 7, 14, 21, 28, 35]
+        case let (e, d) where e.contains(EdgeSet.top) && d == .high:
+            indices = indices + [0, 1, 2, 3, 4, 5, 6]
+        case let (e, d) where e.contains(EdgeSet.right) && d == .high:
+            indices = indices + [6, 13, 20, 27, 34, 41]
+        case let (e, d) where e.contains(EdgeSet.bottom) && d == .high:
+            indices = indices + [35, 36, 37, 38, 39, 40, 41]
+        default:
+            break
+        }
+        return indices
     }
 
 
@@ -309,21 +388,25 @@ private extension FlubberView {
 
         for i in 0..<subviews.count {
             let view = subviews[i]
+            view.backgroundColor = .green
 
             for nextView in subviews {
-                if (view.center.x - nextView.center.x == distanceBetweenNodes) ||
-                    (view.center.y - nextView.center.y == distanceBetweenNodes) {
-                    let attach: UIAttachmentBehavior = UIAttachmentBehavior(item: view,
-                                                                            attachedTo: nextView)
+                if !lockedNodes.contains(nextView) && !lockedNodes.contains(view) {
 
-                    attach.damping = damping
-                    attach.frequency = frequency
+                    if (view.center.x - nextView.center.x == distanceBetweenNodes) ||
+                        (view.center.y - nextView.center.y == distanceBetweenNodes) {
+                        let attach: UIAttachmentBehavior = UIAttachmentBehavior(item: view,
+                                                                                attachedTo: nextView)
 
-                    mainAnimator.addBehavior(attach)
+                        attach.damping = damping
+                        attach.frequency = frequency
 
-                    let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
+                        mainAnimator.addBehavior(attach)
 
-                    mainAnimator.addBehavior(bh)
+                        let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
+
+                        mainAnimator.addBehavior(bh)
+                    }
                 }
             }
         }
