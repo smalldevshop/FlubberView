@@ -6,6 +6,8 @@
 //  Copyright © 2016 Nice Things. All rights reserved.
 //
 
+import UIKit
+
 infix operator <~> : normal
 
 precedencegroup normal {
