@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         let layer = CAShapeLayer()
         layer.fillColor = UIColor.yellow.cgColor
         return FlubberView(withDesiredSize: CGSize(width: 150, height: 150),
-                         shapeLayer: nil,
+                         shapeLayer: layer,
                          damping: 0.1,
                          frequency: 1.0,
                          nodeDensity: .medium)
