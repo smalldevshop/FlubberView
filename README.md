@@ -3,6 +3,9 @@ A very special `UIView` subclass.
 
 [![Build Status](https://travis-ci.org/NiceThings/FlubberView.svg?branch=develop)](https://travis-ci.org/NiceThings/FlubberView)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Version](https://img.shields.io/cocoapods/v/FlubberView.svg?style=flat)](http://cocoapods.org/pods/FlubberView)
+[![License](https://img.shields.io/cocoapods/l/FlubberView.svg?style=flat)](http://cocoapods.org/pods/FlubberView)
+[![Platform](https://img.shields.io/cocoapods/p/FlubberView.svg?style=flat)](http://cocoapods.org/pods/FlubberView)
 
 -------------
 

@@ -15,7 +15,7 @@ public final class FlubberView: UIView {
     public var magnitude: Magnitude = .medium
 
     /// Storage for the attachment behaviors belonging to individual subviews
-    var behaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
+    var behaviors: NSMapTable<UIView, UISnapBehavior> = NSMapTable()
 
     /// Storage for the initial origin coordinates of each individual subview
     var nodeCenterCoordinates: NSMapTable<UIView, NSValue> = NSMapTable()
@@ -111,19 +111,19 @@ public extension FlubberView {
             let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
             let elasticity = magnitude.elasticity
-            let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
+            let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
 
-            bounceBehavior.damping = damping
-            bounceBehavior.frequency = frequency
+
+            snapBehavior.damping = damping
 
             let oldBehavior = behaviors.object(forKey: v)
-            behaviors.setObject(bounceBehavior, forKey: v)
+            behaviors.setObject(snapBehavior, forKey: v)
 
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
             }
 
-            mainAnimator.addBehavior(bounceBehavior)
+            mainAnimator.addBehavior(snapBehavior)
             v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
             mainAnimator.updateItem(usingCurrentState: v)
         }
@@ -316,12 +316,14 @@ private extension FlubberView {
                     let attach: UIAttachmentBehavior = UIAttachmentBehavior(item: view,
                                                                             attachedTo: nextView)
 
-                    attach.damping = damping
-                    attach.frequency = frequency
+                    attach.damping = 0
+                    attach.frequency = 1
 
                     mainAnimator.addBehavior(attach)
 
                     let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
+                    bh.resistance = 0
+                    bh.elasticity = 1
 
                     mainAnimator.addBehavior(bh)
                 }
