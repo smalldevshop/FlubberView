@@ -26,6 +26,7 @@ public struct EdgeSet: OptionSet {
 open class FlubberView: UIView {
 
     public var lockedEdges: [EdgeSet] = []
+    public var attachBehaviors = [UIAttachmentBehavior]()
 
     var lockedNodes: [UIView] {
         var nodes: [UIView] = []
@@ -139,6 +140,16 @@ public extension FlubberView {
             return elasticity
         }
 
+        var impulse: CGFloat {
+            let impulse: CGFloat
+            switch self {
+            case .low: impulse = 2
+            case .medium: impulse = 3
+            case .high: impulse = 4
+            }
+            return impulse
+        }
+
     }
 
     func redraw() {
@@ -151,26 +162,44 @@ public extension FlubberView {
     /// - parameter magnitude: controls the distance that each node
     /// will move during the animation
     func animate() {
+        for attach in attachBehaviors {
+            attach.damping = damping
+            attach.frequency = frequency
+        }
         for v in subviews {
             if !lockedNodes.contains(v) {
+                let force = UIPushBehavior(items: [v], mode: .instantaneous)
+                let randX = (CGFloat(arc4random_uniform(UInt32(magnitude.impulse))) / 50)
+                let randY = (CGFloat(arc4random_uniform(UInt32(magnitude.impulse))) / 50)
+                force.pushDirection = CGVector(dx: 0 <~> randX, dy: 0 <~> randY)
+
                 let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
                     CGPoint(x: v.frame.midX, y: v.frame.midY)
-                let elasticity = magnitude.elasticity
-                let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
+//                let elasticity = magnitude.elasticity
+//                let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
+//
 
-                bounceBehavior.damping = damping
-                bounceBehavior.frequency = frequency
+//
 
-                let oldBehavior = behaviors.object(forKey: v)
-                behaviors.setObject(bounceBehavior, forKey: v)
+//                if let behavior = behaviors.object(forKey: v) {
+//                    behavior.damping = damping
+//                    behavior.frequency = frequency
+//                    behavior.anchorPoint = initialPoint
+//                }
+//                else {
+//                    
+//                }
 
-                if let behavior = oldBehavior {
-                    mainAnimator.removeBehavior(behavior)
-                }
-
-                mainAnimator.addBehavior(bounceBehavior)
-                v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
-                mainAnimator.updateItem(usingCurrentState: v)
+//                mainAnimator.addBehavior(bounceBehavior)
+//                v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
+//                mainAnimator.updateItem(usingCurrentState: v)
+                mainAnimator.addBehavior(force)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.seconds(2)) { [weak self] in
+            for attach in self?.attachBehaviors ?? [] {
+                attach.damping = 1
+                attach.frequency = 0
             }
         }
     }
@@ -379,7 +408,6 @@ private extension FlubberView {
     }
 
 
-
     /// Binds all subviews to their (horizontally or vertically) adjacent views using
     /// a UIAttachmentBehavior
     func attachViews() {
@@ -388,6 +416,15 @@ private extension FlubberView {
 
         for i in 0..<subviews.count {
             let view = subviews[i]
+            let topOffset = UIOffset(horizontal: -view.frame.width / 2, vertical: -view.frame.height / 2)
+            let attachTopLeft = UIAttachmentBehavior(item: view, offsetFromCenter: topOffset, attachedToAnchor: view.frame.origin)
+            attachTopLeft.frictionTorque = 1
+            attachBehaviors.append(attachTopLeft)
+            mainAnimator.addBehavior(attachTopLeft)
+            let centerAttach = UIAttachmentBehavior(item: view, attachedToAnchor: view.center)
+            attachBehaviors.append(centerAttach)
+            mainAnimator.addBehavior(centerAttach)
+            centerAttach.frictionTorque = 1
             view.backgroundColor = .green
 
             for nextView in subviews {
