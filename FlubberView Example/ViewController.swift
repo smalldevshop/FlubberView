@@ -169,7 +169,7 @@ class ViewController: UIViewController {
         }
 
         frequencySlider.callBack = { frequency in
-            self.flubberView.frequency = frequency
+            self.flubberView.frequency = frequency * 5.0
         }
 
         dampingSlider.callBack = { damping in
