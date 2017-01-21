@@ -15,7 +15,7 @@ public final class FlubberView: UIView {
     public var magnitude: Magnitude = .medium
 
     /// Storage for the attachment behaviors belonging to individual subviews
-    var behaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
+    var attachBehaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
 
     /// Storage for the initial origin coordinates of each individual subview
     var nodeCenterCoordinates: NSMapTable<UIView, NSValue> = NSMapTable()
@@ -107,17 +107,17 @@ public extension FlubberView {
     /// - parameter magnitude: controls the distance that each node
     /// will move during the animation
     func animate() {
-        for v in subviews {
-            let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
-                CGPoint(x: v.frame.midX, y: v.frame.midY)
-            let elasticity = magnitude.elasticity
-            let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
+        let v = subviews[4]
+                let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
+                    CGPoint(x: v.frame.midX, y: v.frame.midY)
+                                let elasticity = magnitude.elasticity
+                                let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
 
             bounceBehavior.damping = damping
             bounceBehavior.frequency = frequency
 
-            let oldBehavior = behaviors.object(forKey: v)
-            behaviors.setObject(bounceBehavior, forKey: v)
+            let oldBehavior = attachBehaviors.object(forKey: v)
+            attachBehaviors.setObject(bounceBehavior, forKey: v)
 
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
@@ -126,7 +126,6 @@ public extension FlubberView {
             mainAnimator.addBehavior(bounceBehavior)
             v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
             mainAnimator.updateItem(usingCurrentState: v)
-        }
     }
 
 }
@@ -309,6 +308,7 @@ private extension FlubberView {
 
         for i in 0..<subviews.count {
             let view = subviews[i]
+            view.backgroundColor = .green
 
             for nextView in subviews {
                 if (view.center.x - nextView.center.x == distanceBetweenNodes) ||
