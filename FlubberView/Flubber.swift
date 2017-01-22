@@ -35,6 +35,10 @@ protocol ElasticConfigurable: Initializable {
     /// within the FlubberView
     var frequency: CGFloat { get set }
 
+    /// The duration of the animation (view snaps back into place
+    /// after the duration has elapsed)
+    var duration: TimeInterval { get set }
+
     /// A CADisplayLink instance to handle redrawing the FlubberView
     /// at regular intervals
     var displayLink: CADisplayLink { get }
