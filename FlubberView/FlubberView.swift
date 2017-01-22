@@ -27,7 +27,7 @@ public final class FlubberView: UIView {
     public var frequency: CGFloat = 0.0 {
         didSet { reset() }
     }
-    public var duration: TimeInterval = 2.0 {
+    public var duration: TimeInterval = 1.0 {
         didSet { reset() }
     }
     public var damping: CGFloat = 0.0 {
@@ -58,11 +58,13 @@ extension FlubberView: ElasticConfigurable {
                             shapeLayer: CAShapeLayer? = nil,
                             damping: CGFloat,
                             frequency: CGFloat,
+                            duration: TimeInterval = 1.0,
                             nodeDensity: NodeDensity = .medium) {
         self.init()
         self.damping = damping
         self.shapeLayer = shapeLayer
         self.frequency = frequency
+        self.duration = duration
         self.nodeDensity = nodeDensity
         frame.size = desiredSize
         compose()
@@ -123,7 +125,7 @@ public extension FlubberView {
                 attachBehaviors.setObject(anchor, forKey: v)
                 mainAnimator.addBehavior(anchor)
             }
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0, execute: {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + duration, execute: {
                 let snap = UISnapBehavior(item: v, snapTo: initialPoint)
                 snap.damping = 0.0
                 self.attachBehaviors.setObject(snap, forKey: v)

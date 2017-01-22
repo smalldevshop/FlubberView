@@ -57,6 +57,7 @@ protocol ElasticConfigurable: Initializable {
          shapeLayer: CAShapeLayer?,
          damping: CGFloat,
          frequency: CGFloat,
+         duration: TimeInterval,
          nodeDensity: NodeDensity)
 
 }
