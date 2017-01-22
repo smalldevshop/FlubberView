@@ -79,14 +79,14 @@ public extension FlubberView {
         case low, medium, high
 
         /// The distance each node will move while animating
-        var impulse: UInt32 {
-            let impulse: UInt32
+        var elasticity: CGFloat {
+            let elasticity: CGFloat
             switch self {
-            case .low: impulse = 2
-            case .medium: impulse = 3
-            case .high: impulse = 4
+            case .low: elasticity = 4.0
+            case .medium: elasticity = 16.0
+            case .high: elasticity = 64.0
             }
-            return impulse
+            return elasticity
         }
 
     }
@@ -110,21 +110,22 @@ public extension FlubberView {
     func animate() {
         for v in subviews {
             let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
-                    CGPoint(x: v.frame.midX, y: v.frame.midY)
+                CGPoint(x: v.frame.midX, y: v.frame.midY)
+
+            let bounceBehavior = bounce(for: v)
+            bounceBehavior.damping = damping
+            bounceBehavior.frequency = frequency
+
             let oldBehavior = attachBehaviors.object(forKey: v)
+            attachBehaviors.setObject(bounceBehavior, forKey: v)
+
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
             }
-            if !cornerNodeIndices.contains(v.tag) {
-                let push = force(for: v)
-                attachBehaviors.setObject(push, forKey: v)
-                mainAnimator.addBehavior(push)
-            } else {
-                let anchor = UIDynamicItemBehavior(items:[v])
-                anchor.density = 1000
-                attachBehaviors.setObject(anchor, forKey: v)
-                mainAnimator.addBehavior(anchor)
-            }
+
+            mainAnimator.addBehavior(bounceBehavior)
+            v.center = CGPoint(x: v.center.x <~> magnitude.elasticity, y: v.center.y <~> magnitude.elasticity)
+            mainAnimator.updateItem(usingCurrentState: v)
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + duration, execute: {
                 let snap = UISnapBehavior(item: v, snapTo: initialPoint)
                 snap.damping = 0.0
@@ -266,13 +267,15 @@ private extension FlubberView {
     ///
     /// - Parameter view: the view to which the push behavior will be applied.
     /// - Returns: a UIPushBehavior.
-    func force(for view: UIView) -> UIPushBehavior {
-        let force = UIPushBehavior(items: [view], mode: .instantaneous)
-        let randX = (CGFloat(arc4random_uniform(magnitude.impulse)) / 50)
-        let randY = (CGFloat(arc4random_uniform(magnitude.impulse)) / 50)
-        force.pushDirection = CGVector(dx: 0 <~> randX, dy: 0 <~> randY)
+    func bounce(for view: UIView) -> UIAttachmentBehavior {
+        let initialPoint = nodeCenterCoordinates.object(forKey: view)?.cgPointValue ??
+            CGPoint(x: view.frame.midX, y: view.frame.midY)
+        let bounceBehavior = UIAttachmentBehavior(item: view, attachedToAnchor: initialPoint)
 
-        return force
+        bounceBehavior.damping = damping
+        bounceBehavior.frequency = frequency
+
+        return bounceBehavior
     }
 
     /// Adds shapeLayer as a sublayer if not nil
