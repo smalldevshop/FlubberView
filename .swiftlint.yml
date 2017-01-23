@@ -1,3 +1,6 @@
 included:
   - FlubberView
 
+line_length: 110 
+function_parameter_count: 6
+
