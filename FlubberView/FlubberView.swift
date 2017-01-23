@@ -15,7 +15,10 @@ public final class FlubberView: UIView {
     public var magnitude: Magnitude = .medium
 
     /// Storage for the attachment behaviors belonging to individual subviews
-    var attachBehaviors: NSMapTable<UIView, UIDynamicBehavior> = NSMapTable()
+    var behaviors: NSMapTable<UIView, UIDynamicBehavior> = NSMapTable()
+
+    /// Storage for the snap behavior that moves the flubberview back into place
+    var snapBehavior: UISnapBehavior?
 
     /// Storage for the initial origin coordinates of each individual subview
     var nodeCenterCoordinates: NSMapTable<UIView, NSValue> = NSMapTable()
@@ -116,8 +119,8 @@ public extension FlubberView {
             bounceBehavior.damping = damping
             bounceBehavior.frequency = frequency
 
-            let oldBehavior = attachBehaviors.object(forKey: v)
-            attachBehaviors.setObject(bounceBehavior, forKey: v)
+            let oldBehavior = behaviors.object(forKey: v)
+            behaviors.setObject(bounceBehavior, forKey: v)
 
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
@@ -126,10 +129,18 @@ public extension FlubberView {
             mainAnimator.addBehavior(bounceBehavior)
             v.center = CGPoint(x: v.center.x <~> magnitude.elasticity, y: v.center.y <~> magnitude.elasticity)
             mainAnimator.updateItem(usingCurrentState: v)
+
+            // Debounce snap behavior
+            if let snap = snapBehavior {
+                mainAnimator.removeBehavior(snap)
+            }
+
+            // Snap back to original position
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + duration, execute: {
                 let snap = UISnapBehavior(item: v, snapTo: initialPoint)
                 snap.damping = 0.0
-                self.attachBehaviors.setObject(snap, forKey: v)
+                self.behaviors.setObject(snap, forKey: v)
+                self.snapBehavior = snap
                 self.mainAnimator.addBehavior(snap)
             })
         }
