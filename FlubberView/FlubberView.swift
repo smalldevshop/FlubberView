@@ -15,13 +15,19 @@ public final class FlubberView: UIView {
     public var magnitude: Magnitude = .medium
 
     /// Storage for the attachment behaviors belonging to individual subviews
-    var behaviors: NSMapTable<UIView, UIDynamicBehavior> = NSMapTable()
+    var behaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
 
     /// Storage for the snap behavior that moves the flubberview back into place
-    var snapBehavior: UISnapBehavior?
+    var snapBehaviors: NSMapTable<UIView, UISnapBehavior> = NSMapTable()
 
     /// Storage for the initial origin coordinates of each individual subview
     var nodeCenterCoordinates: NSMapTable<UIView, NSValue> = NSMapTable()
+
+    fileprivate var snapOperation: Operation? {
+        willSet {
+            snapOperation?.cancel()
+        }
+    }
 
     // MARK: ElasticConfigurable
 
@@ -105,45 +111,58 @@ public extension FlubberView {
         shapeLayer?.path = viewPath.cgPath
     }
 
+
+
     /// Repositions all nodes within the FlubberView, and snaps
     /// them back to their original position after a delay
     ///
     /// - parameter magnitude: controls the distance that each node
     /// will move during the animation
     func animate() {
+        var snaps = [UISnapBehavior]()
+        var bounces = [UIAttachmentBehavior]()
         for v in subviews {
-            let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
-                CGPoint(x: v.frame.midX, y: v.frame.midY)
-
-            let bounceBehavior = bounce(for: v)
-            bounceBehavior.damping = damping
-            bounceBehavior.frequency = frequency
-
-            let oldBehavior = behaviors.object(forKey: v)
-            behaviors.setObject(bounceBehavior, forKey: v)
-
-            if let behavior = oldBehavior {
-                mainAnimator.removeBehavior(behavior)
-            }
-
-            mainAnimator.addBehavior(bounceBehavior)
-            v.center = CGPoint(x: v.center.x <~> magnitude.elasticity, y: v.center.y <~> magnitude.elasticity)
-            mainAnimator.updateItem(usingCurrentState: v)
-
-            // Debounce snap behavior
-            if let snap = snapBehavior {
+            if let snap = snapBehaviors.object(forKey: v) {
                 mainAnimator.removeBehavior(snap)
+                snaps.append(snap)
+            } else {
+                let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
+                    CGPoint(x: v.frame.midX, y: v.frame.midY)
+                let snap = UISnapBehavior(item: v, snapTo: initialPoint)
+                snap.damping = 0.25
+                snapBehaviors.setObject(snap, forKey: v)
+                snaps.append(snap)
             }
 
-            // Snap back to original position
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + duration, execute: {
-                let snap = UISnapBehavior(item: v, snapTo: initialPoint)
-                snap.damping = 0.0
-                self.behaviors.setObject(snap, forKey: v)
-                self.snapBehavior = snap
-                self.mainAnimator.addBehavior(snap)
-            })
+            let bounceBehavior: UIAttachmentBehavior
+            if let oldBehavior = behaviors.object(forKey: v) {
+                bounceBehavior = oldBehavior
+                mainAnimator.removeBehavior(oldBehavior)
+            } else {
+                bounceBehavior = bounce(for: v)
+                bounceBehavior.damping = damping
+                bounceBehavior.frequency = frequency
+                behaviors.setObject(bounceBehavior, forKey: v)
+            }
+            bounces.append(bounceBehavior)
+            mainAnimator.addBehavior(bounceBehavior)
+            v.center = CGPoint(x: v.center.x <~> magnitude.elasticity,
+                               y: v.center.y <~> magnitude.elasticity)
+            mainAnimator.updateItem(usingCurrentState: v)
         }
+        // Debounce snap behavior
+        let operation = BlockOperation {
+            snaps.forEach(self.mainAnimator.addBehavior)
+            bounces.forEach(self.mainAnimator.removeBehavior)
+        }
+
+        self.snapOperation = operation
+
+        // Snap back to original position
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + duration, execute: {
+            operation.start()
+        })
+
     }
 
 }
