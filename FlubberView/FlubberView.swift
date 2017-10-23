@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class FlubberView: UIView {
+public class FlubberView: UIView {
 
     /// Controls the distance that each node (subview)
     /// will move during the animation
