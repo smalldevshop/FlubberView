@@ -55,7 +55,7 @@ public class FlubberView: UIView {
 
 extension FlubberView: ElasticConfigurable {
 
-    public convenience init(withDesiredSize desiredSize: CGSize,
+    public required init(withDesiredSize desiredSize: CGSize,
                             shapeLayer: CAShapeLayer? = nil,
                             damping: CGFloat,
                             frequency: CGFloat,
