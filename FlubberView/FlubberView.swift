@@ -51,7 +51,7 @@ open class FlubberView: UIView {
         super.init(frame: frame)
     }
    
-    override func didMoveToSuperview() {
+    override open func didMoveToSuperview() {
         super.didMoveToSuperview()
         setupMainLayer()
         displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
