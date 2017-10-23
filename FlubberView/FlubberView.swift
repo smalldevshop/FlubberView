@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class FlubberView: UIView {
+open class FlubberView: UIView {
 
     /// Controls the distance that each node (subview)
     /// will move during the animation
@@ -50,6 +50,13 @@ public class FlubberView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
+   
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        setupMainLayer()
+        displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
+        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
+    }
 
     public required init(withDesiredSize desiredSize: CGSize,
                          shapeLayer: CAShapeLayer? = nil,
@@ -85,13 +92,6 @@ public extension FlubberView {
             return elasticity
         }
 
-    }
-
-    public override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        setupMainLayer()
-        displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
-        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
     }
 
     func redraw() {
