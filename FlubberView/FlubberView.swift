@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class FlubberView: UIView {
+public class FlubberView: UIView {
 
     /// Controls the distance that each node (subview)
     /// will move during the animation
@@ -51,15 +51,11 @@ public final class FlubberView: UIView {
         super.init(frame: frame)
     }
 
-}
-
-extension FlubberView: ElasticConfigurable {
-
-    public convenience init(withDesiredSize desiredSize: CGSize,
-                            shapeLayer: CAShapeLayer? = nil,
-                            damping: CGFloat,
-                            frequency: CGFloat,
-                            nodeDensity: NodeDensity = .medium) {
+    public required init(withDesiredSize desiredSize: CGSize,
+                         shapeLayer: CAShapeLayer? = nil,
+                         damping: CGFloat,
+                         frequency: CGFloat,
+                         nodeDensity: NodeDensity = .medium) {
         self.init()
         self.damping = damping
         self.shapeLayer = shapeLayer
@@ -68,6 +64,7 @@ extension FlubberView: ElasticConfigurable {
         frame.size = desiredSize
         compose()
     }
+
 }
 
 public extension FlubberView {
