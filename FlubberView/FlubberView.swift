@@ -58,12 +58,12 @@ open class FlubberView: UIView {
         displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
     }
 
-    public required init(withDesiredSize desiredSize: CGSize,
+    public convenience init(withDesiredSize desiredSize: CGSize,
                          shapeLayer: CAShapeLayer? = nil,
                          damping: CGFloat,
                          frequency: CGFloat,
                          nodeDensity: NodeDensity = .medium) {
-        self.init()
+        self.init(frame: .zero)
         self.damping = damping
         self.shapeLayer = shapeLayer
         self.frequency = frequency
