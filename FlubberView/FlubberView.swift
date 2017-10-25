@@ -38,7 +38,7 @@ open class FlubberView: UIView {
             reset()
         }
     }
-    open lazy var mainAnimator: UIDynamicAnimator = {
+    public lazy var mainAnimator: UIDynamicAnimator = {
         return UIDynamicAnimator(referenceView: self)
     }()
 
