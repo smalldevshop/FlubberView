@@ -5,7 +5,6 @@
 //  Created by Matthew Buckley on 9/18/16.
 //  Copyright © 2016 Nice Things. All rights reserved.
 //
-
 import UIKit
 
 open class FlubberView: UIView {
@@ -15,15 +14,15 @@ open class FlubberView: UIView {
     public var magnitude: Magnitude = .medium
 
     /// Storage for the attachment behaviors belonging to individual subviews
-    var behaviors: NSMapTable<UIView, UIAttachmentBehavior> = NSMapTable()
+    var behaviors: NSMapTable<UIView, UISnapBehavior> = NSMapTable()
 
     /// Storage for the initial origin coordinates of each individual subview
     var nodeCenterCoordinates: NSMapTable<UIView, NSValue> = NSMapTable()
 
     // MARK: ElasticConfigurable
-
     var displayLink: CADisplayLink = CADisplayLink()
     var shapeLayer: CAShapeLayer?
+    var shapeLayerIndex: UInt32 = 0
     public var frequency: CGFloat = 0.0 {
         didSet {
             reset()
@@ -50,16 +49,10 @@ open class FlubberView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-   
-    override open func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        setupMainLayer()
-        displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
-        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
-    }
 
     public required init(withDesiredSize desiredSize: CGSize,
                          shapeLayer: CAShapeLayer? = nil,
+                         shapeLayerIndex: UInt32 = 0,
                          damping: CGFloat,
                          frequency: CGFloat,
                          nodeDensity: NodeDensity = .medium) {
@@ -68,10 +61,10 @@ open class FlubberView: UIView {
         self.shapeLayer = shapeLayer
         self.frequency = frequency
         self.nodeDensity = nodeDensity
+        self.shapeLayerIndex = shapeLayerIndex
         frame.size = desiredSize
         compose()
     }
-
 }
 
 public extension FlubberView {
@@ -94,7 +87,14 @@ public extension FlubberView {
 
     }
 
-    func redraw() {
+    open override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        setupMainLayer()
+        displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
+        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
+    }
+
+    @objc func redraw() {
         shapeLayer?.path = viewPath.cgPath
     }
 
@@ -108,19 +108,19 @@ public extension FlubberView {
             let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
             let elasticity = magnitude.elasticity
-            let bounceBehavior = UIAttachmentBehavior(item: v, attachedToAnchor: initialPoint)
+            let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
 
-            bounceBehavior.damping = damping
-            bounceBehavior.frequency = frequency
+
+            snapBehavior.damping = damping
 
             let oldBehavior = behaviors.object(forKey: v)
-            behaviors.setObject(bounceBehavior, forKey: v)
+            behaviors.setObject(snapBehavior, forKey: v)
 
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
             }
 
-            mainAnimator.addBehavior(bounceBehavior)
+            mainAnimator.addBehavior(snapBehavior)
             v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
             mainAnimator.updateItem(usingCurrentState: v)
         }
@@ -198,7 +198,7 @@ private extension FlubberView {
 
         /// Point at the top of the left edge of the FlubberView, inset by the cornerRadius
         let leftEdgeTop = CGPoint(x: subviews[cornerNodeIndices[0]].center.x,
-                                     y: subviews[cornerNodeIndices[0]].center.y + cornerRadius)
+                                  y: subviews[cornerNodeIndices[0]].center.y + cornerRadius)
 
         // Draw a point at the top left corner
         bPath.move(to: topEdgeLeft)
@@ -259,7 +259,7 @@ private extension FlubberView {
         guard let shapeLayer = shapeLayer else {
             return
         }
-        layer.addSublayer(shapeLayer)
+        layer.insertSublayer(shapeLayer, at: shapeLayerIndex)
     }
 
 
@@ -313,12 +313,14 @@ private extension FlubberView {
                     let attach: UIAttachmentBehavior = UIAttachmentBehavior(item: view,
                                                                             attachedTo: nextView)
 
-                    attach.damping = damping
-                    attach.frequency = frequency
+                    attach.damping = 0
+                    attach.frequency = 1
 
                     mainAnimator.addBehavior(attach)
 
                     let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
+                    bh.resistance = 0
+                    bh.elasticity = 1
 
                     mainAnimator.addBehavior(bh)
                 }
@@ -333,6 +335,16 @@ private extension FlubberView {
 
 }
 
+private extension CGSize {
+
+    /// A coordinate pair representintg the distance from
+    /// any edge of a CGRect of a given size to the center
+    var distanceToCenter: (CGFloat, CGFloat) {
+        return (width/2 - width/2, height/2 - height/2)
+    }
+
+}
+
 private extension CGFloat {
 
     /// Calculates the distance that should separate each node
@@ -342,16 +354,6 @@ private extension CGFloat {
     /// - returns: the distance that should separate the nodes in the FlubberView
     func separation(for nodeCount: Int) -> CGFloat {
         return self / CGFloat(nodeCount - 1)
-    }
-
-}
-
-private extension CGSize {
-
-    /// A coordinate pair representintg the distance from
-    /// any edge of a CGRect of a given size to the center
-    var distanceToCenter: (CGFloat, CGFloat) {
-       return (width/2 - width/2, height/2 - height/2)
     }
 
 }
