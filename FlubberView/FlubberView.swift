@@ -23,6 +23,10 @@ open class FlubberView: UIView {
     var displayLink: CADisplayLink = CADisplayLink()
     var shapeLayer: CAShapeLayer?
     var shapeLayerIndex: UInt32 = 0
+
+    /// The corner radius of the shape layer
+    var cornerRadius: CGFloat = 0.0
+    
     public var frequency: CGFloat = 0.0 {
         didSet {
             reset()
@@ -62,6 +66,7 @@ open class FlubberView: UIView {
         self.frequency = frequency
         self.nodeDensity = nodeDensity
         self.shapeLayerIndex = shapeLayerIndex
+        cornerRadius = shapeLayer?.cornerRadius ?? 0.0
         frame.size = desiredSize
         compose()
     }
@@ -109,7 +114,6 @@ public extension FlubberView {
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
             let elasticity = magnitude.elasticity
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
-
 
             snapBehavior.damping = damping
 
@@ -176,9 +180,6 @@ private extension FlubberView {
 
         /// Create bezier path
         let bPath: UIBezierPath = UIBezierPath()
-
-        /// The corner radius of the shape layer
-        let cornerRadius = shapeLayer?.cornerRadius ?? 0.0
 
         /// Point on the left side of the top edge of the FlubberView, inset by the cornerRadius
         let topEdgeLeft = CGPoint(x: subviews[cornerNodeIndices[0]].center.x + cornerRadius,

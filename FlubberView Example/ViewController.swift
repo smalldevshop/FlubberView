@@ -14,11 +14,14 @@ class ViewController: UIViewController {
     var flubberView = { () -> FlubberView in
         let layer = CAShapeLayer()
         layer.fillColor = UIColor.yellow.cgColor
-        return FlubberView(withDesiredSize: CGSize(width: 150, height: 150),
+        layer.cornerRadius = 25
+        let f = FlubberView(withDesiredSize: CGSize(width: 50, height: 180),
                          shapeLayer: layer,
-                         damping: 0.1,
-                         frequency: 1.0,
-                         nodeDensity: .medium)
+                         damping: 0.2,
+                         frequency: 0.2,
+                         nodeDensity: .low)
+        f.subviews.forEach({ $0.backgroundColor = .green })
+        return f
     }()
 
     var magnitudeSlider: Slider = Slider()
@@ -137,8 +140,8 @@ class ViewController: UIViewController {
         dampingSlider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
         flubberView.topAnchor.constraint(equalTo: dampingSlider.bottomAnchor, constant: 30.0).isActive = true
         flubberView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        flubberView.widthAnchor.constraint(equalToConstant: 150.0).isActive = true
-        flubberView.heightAnchor.constraint(equalToConstant: 150.0).isActive = true
+        flubberView.widthAnchor.constraint(equalToConstant: 50.0).isActive = true
+        flubberView.heightAnchor.constraint(equalToConstant: 180.0).isActive = true
 
         registerGestureRecognizers()
 
