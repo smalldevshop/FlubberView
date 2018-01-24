@@ -27,6 +27,9 @@ open class FlubberView: UIView {
     /// The corner radius of the shape layer
     var cornerRadius: CGFloat = 0.0
     
+    /// initial (non-animating) size
+    var desiredSize: CGSize = .zero
+    
     public var frequency: CGFloat = 0.0 {
         didSet {
             reset()
@@ -67,6 +70,7 @@ open class FlubberView: UIView {
         self.nodeDensity = nodeDensity
         self.shapeLayerIndex = shapeLayerIndex
         cornerRadius = shapeLayer?.cornerRadius ?? 0.0
+        self.desiredSize = desiredSize
         frame.size = desiredSize
         compose()
     }
@@ -210,7 +214,7 @@ private extension FlubberView {
 
         var center: CGPoint
         
-        if self.frame.height <= cornerRadius * 2 {
+        if desiredSize.height <= cornerRadius * 2 {
             bPath.addQuadCurve(to: topEdgeRight, controlPoint: subviews[controlNodeIndices[0]].center)
             center = CGPoint(x: topEdgeRight.x,
                              y: topEdgeRight.y + cornerRadius)
@@ -227,7 +231,7 @@ private extension FlubberView {
                          startAngle: CGFloat(M_PI_2),
                          endAngle: CGFloat(-M_PI_2),
                          clockwise: true)
-        } else if self.frame.width <= cornerRadius * 2 {
+        } else if desiredSize.width <= cornerRadius * 2 {
             bPath.move(to: rightEdgeTop)
             center = CGPoint(x: topEdgeLeft.x,
                              y: topEdgeLeft.y + cornerRadius)
