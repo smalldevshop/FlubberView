@@ -188,6 +188,10 @@ private extension FlubberView {
         let topEdgeRight = CGPoint(x: subviews[cornerNodeIndices[1]].center.x - cornerRadius,
                                    y: subviews[cornerNodeIndices[1]].center.y)
 
+        /// Point at the top of the right edge of the FlubberView, inset by the cornerRadius
+        let rightEdgeTop = CGPoint(x: subviews[cornerNodeIndices[1]].center.x,
+                                      y: subviews[cornerNodeIndices[1]].center.y + cornerRadius)
+        
         /// Point at the bottom of the right edge of the FlubberView, inset by the cornerRadius
         let rightEdgeBottom = CGPoint(x: subviews[cornerNodeIndices[2]].center.x,
                                       y: subviews[cornerNodeIndices[2]].center.y - cornerRadius)
@@ -204,52 +208,90 @@ private extension FlubberView {
         bPath.move(to: topEdgeLeft)
 
         var center: CGPoint
-
-        // move to the right side of the top edge through the center point of
-        // the middle node subview of the top edge
-        bPath.addQuadCurve(to: topEdgeRight, controlPoint: subviews[controlNodeIndices[0]].center)
-        center = CGPoint(x: topEdgeRight.x,
-                         y: topEdgeRight.y + cornerRadius)
-        bPath.addArc(withCenter: center,
-                     radius: cornerRadius,
-                     startAngle: CGFloat(M_PI_2),
-                     endAngle: 0.0,
-                     clockwise: true)
-
-        // move to the bottom end of the right edge through the center point of
-        // the middle node of the right edge
-        bPath.addQuadCurve(to: rightEdgeBottom,
-                           controlPoint: subviews[controlNodeIndices[1]].center)
-        center = CGPoint(x: subviews[cornerNodeIndices[2]].center.x - cornerRadius,
-                         y: subviews[cornerNodeIndices[2]].center.y - cornerRadius)
-        bPath.addArc(withCenter: center,
-                     radius: cornerRadius,
-                     startAngle: 0,
-                     endAngle: CGFloat(M_PI_2),
-                     clockwise: true)
-
-        // move to the left end of the bottom edge through the center point of
-        // the middle node of the bottom edge
-        bPath.addQuadCurve(to: bottomEdgeLeft, controlPoint: subviews[controlNodeIndices[2]].center)
-        center = CGPoint(x: subviews[cornerNodeIndices[3]].center.x + cornerRadius,
-                         y: subviews[cornerNodeIndices[3]].center.y - cornerRadius)
-        bPath.addArc(withCenter: center,
-                     radius: cornerRadius,
-                     startAngle: CGFloat(-M_PI_4),
-                     endAngle: CGFloat(M_PI),
-                     clockwise: true)
-
-        // move to the top end of the left edgee through the center point of
-        // the middle node of the left edge
-        bPath.addQuadCurve(to: leftEdgeTop, controlPoint: subviews[controlNodeIndices[3]].center)
-        center = CGPoint(x: subviews[cornerNodeIndices[0]].center.x + cornerRadius,
-                         y: subviews[cornerNodeIndices[0]].center.y + cornerRadius)
-        bPath.addArc(withCenter: center,
-                     radius: cornerRadius,
-                     startAngle: CGFloat(M_PI),
-                     endAngle: CGFloat(M_PI_2),
-                     clockwise: true)
-
+        
+        if self.frame.height <= cornerRadius * 2 {
+            bPath.addQuadCurve(to: topEdgeRight, controlPoint: subviews[controlNodeIndices[0]].center)
+            center = CGPoint(x: topEdgeRight.x,
+                             y: topEdgeRight.y + cornerRadius)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: CGFloat(-M_PI_2),
+                         endAngle: CGFloat(M_PI_2),
+                         clockwise: true)
+            
+            center = CGPoint(x: topEdgeLeft.x,
+                             y: topEdgeLeft.y + cornerRadius)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: CGFloat(M_PI_2),
+                         endAngle: CGFloat(-M_PI_2),
+                         clockwise: true)
+        } else if self.frame.width <= cornerRadius * 2 {
+            bPath.move(to: rightEdgeTop)
+            center = CGPoint(x: topEdgeLeft.x,
+                             y: topEdgeLeft.y + cornerRadius)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: CGFloat(-M_PI),
+                         endAngle: CGFloat(0.0),
+                         clockwise: true)
+            bPath.addQuadCurve(to: rightEdgeBottom, controlPoint: subviews[controlNodeIndices[1]].center)
+            
+            center = CGPoint(x: rightEdgeBottom.x - cornerRadius,
+                             y: rightEdgeBottom.y)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: CGFloat(0.0),
+                         endAngle: CGFloat(-M_PI),
+                         clockwise: true)
+            bPath.addQuadCurve(to: leftEdgeTop, controlPoint: subviews[controlNodeIndices[3]].center)
+        } else {
+            // move to the right side of the top edge through the center point of
+            // the middle node subview of the top edge
+            bPath.addQuadCurve(to: topEdgeRight, controlPoint: subviews[controlNodeIndices[0]].center)
+            center = CGPoint(x: topEdgeRight.x,
+                             y: topEdgeRight.y + cornerRadius)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: CGFloat(M_PI_2),
+                         endAngle: 0.0,
+                         clockwise: true)
+            
+            // move to the bottom end of the right edge through the center point of
+            // the middle node of the right edge
+            bPath.addQuadCurve(to: rightEdgeBottom,
+                               controlPoint: subviews[controlNodeIndices[1]].center)
+            center = CGPoint(x: subviews[cornerNodeIndices[2]].center.x - cornerRadius,
+                             y: subviews[cornerNodeIndices[2]].center.y - cornerRadius)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: 0,
+                         endAngle: CGFloat(M_PI_2),
+                         clockwise: true)
+            
+            // move to the left end of the bottom edge through the center point of
+            // the middle node of the bottom edge
+            bPath.addQuadCurve(to: bottomEdgeLeft, controlPoint: subviews[controlNodeIndices[2]].center)
+            center = CGPoint(x: subviews[cornerNodeIndices[3]].center.x + cornerRadius,
+                             y: subviews[cornerNodeIndices[3]].center.y - cornerRadius)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: CGFloat(-M_PI_4),
+                         endAngle: CGFloat(M_PI),
+                         clockwise: true)
+            
+            // move to the top end of the left edgee through the center point of
+            // the middle node of the left edge
+            bPath.addQuadCurve(to: leftEdgeTop, controlPoint: subviews[controlNodeIndices[3]].center)
+            center = CGPoint(x: subviews[cornerNodeIndices[0]].center.x + cornerRadius,
+                             y: subviews[cornerNodeIndices[0]].center.y + cornerRadius)
+            bPath.addArc(withCenter: center,
+                         radius: cornerRadius,
+                         startAngle: CGFloat(M_PI),
+                         endAngle: CGFloat(M_PI_2),
+                         clockwise: true)
+        }
+        
         return bPath
     }
 
