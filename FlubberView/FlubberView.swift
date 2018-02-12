@@ -134,6 +134,42 @@ public extension FlubberView {
         }
     }
 
+    func pop() {
+        for v in subviews {
+            let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
+                CGPoint(x: v.frame.midX, y: v.frame.midY)
+            let elasticity = magnitude.elasticity
+            let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
+            
+            snapBehavior.damping = damping
+            
+            let oldBehavior = behaviors.object(forKey: v)
+            behaviors.setObject(snapBehavior, forKey: v)
+            
+            if let behavior = oldBehavior {
+                mainAnimator.removeBehavior(behavior)
+            }
+            
+            if subviews.index(of: v) == controlNodeIndices[0] {
+                mainAnimator.addBehavior(snapBehavior)
+                v.center = CGPoint(x: v.center.x, y: v.center.y - elasticity)
+                mainAnimator.updateItem(usingCurrentState: v)
+            } else if subviews.index(of: v) == controlNodeIndices[1] {
+                mainAnimator.addBehavior(snapBehavior)
+                v.center = CGPoint(x: v.center.x + elasticity, y: v.center.y)
+                mainAnimator.updateItem(usingCurrentState: v)
+            } else if subviews.index(of: v) == controlNodeIndices[2] {
+                mainAnimator.addBehavior(snapBehavior)
+                v.center = CGPoint(x: v.center.x, y: v.center.y + elasticity)
+                mainAnimator.updateItem(usingCurrentState: v)
+            } else if subviews.index(of: v) == controlNodeIndices[3] {
+                mainAnimator.addBehavior(snapBehavior)
+                v.center = CGPoint(x: v.center.x - elasticity, y: v.center.y)
+                mainAnimator.updateItem(usingCurrentState: v)
+            }
+        }
+    }
+    
 }
 
 private extension FlubberView {
