@@ -136,12 +136,15 @@ public extension FlubberView {
 
     func pop() {
         for v in subviews {
+            print("magnitude: \(magnitude.elasticity)")
+            print("damping: \(damping)")
+            print("frequency: \(frequency)")
             let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
-            let elasticity = magnitude.elasticity
+            let elasticity = magnitude.elasticity * 3
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
             
-            snapBehavior.damping = damping
+            snapBehavior.damping = 0.0
             
             let oldBehavior = behaviors.object(forKey: v)
             behaviors.setObject(snapBehavior, forKey: v)
