@@ -8,22 +8,22 @@
 import UIKit
 
 open class FlubberView: UIView {
-
+    
     /// Controls the distance that each node (subview)
     /// will move during the animation
     public var magnitude: Magnitude = .medium
-
+    
     /// Storage for the attachment behaviors belonging to individual subviews
     var behaviors: NSMapTable<UIView, UISnapBehavior> = NSMapTable()
-
+    
     /// Storage for the initial origin coordinates of each individual subview
     var nodeCenterCoordinates: NSMapTable<UIView, NSValue> = NSMapTable()
-
+    
     // MARK: ElasticConfigurable
     var displayLink: CADisplayLink = CADisplayLink()
     var shapeLayer: CAShapeLayer?
     var shapeLayerIndex: UInt32 = 0
-
+    
     /// The corner radius of the shape layer
     var cornerRadius: CGFloat = 0.0
     
@@ -48,15 +48,15 @@ open class FlubberView: UIView {
     public lazy var mainAnimator: UIDynamicAnimator = {
         return UIDynamicAnimator(referenceView: self)
     }()
-
+    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-
+    
     public required init(withDesiredSize desiredSize: CGSize,
                          shapeLayer: CAShapeLayer? = nil,
                          shapeLayerIndex: UInt32 = 0,
@@ -77,12 +77,12 @@ open class FlubberView: UIView {
 }
 
 public extension FlubberView {
-
+    
     /// Controls the elasticity of the individual nodes within the
     /// FlubberView, and the length of the animation
     enum Magnitude {
         case low, medium, high
-
+        
         /// The distance each node will move while animating
         var elasticity: CGFloat {
             let elasticity: CGFloat
@@ -93,20 +93,20 @@ public extension FlubberView {
             }
             return elasticity
         }
-
+        
     }
-
+    
     open override func didMoveToSuperview() {
         super.didMoveToSuperview()
         setupMainLayer()
         displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
         displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
     }
-
+    
     @objc func redraw() {
         shapeLayer?.path = viewPath.cgPath
     }
-
+    
     /// Repositions all nodes within the FlubberView, and snaps
     /// them back to their original position after a delay
     ///
@@ -118,58 +118,53 @@ public extension FlubberView {
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
             let elasticity = magnitude.elasticity
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
-
+            
             snapBehavior.damping = damping
-
+            
             let oldBehavior = behaviors.object(forKey: v)
             behaviors.setObject(snapBehavior, forKey: v)
-
+            
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
             }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                self.mainAnimator.addBehavior(snapBehavior)
-            }
+            
+            self.mainAnimator.addBehavior(snapBehavior)
             v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
             mainAnimator.updateItem(usingCurrentState: v)
         }
     }
-
+    
     func pop() {
         for v in subviews {
-            print("magnitude: \(magnitude.elasticity)")
-            print("damping: \(damping)")
-            print("frequency: \(frequency)")
             let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
-            let elasticity = magnitude.elasticity * 3
+            let elasticity = magnitude.elasticity * 2
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
             
             snapBehavior.damping = 0.0
-
+            
             let oldBehavior = behaviors.object(forKey: v)
             behaviors.setObject(snapBehavior, forKey: v)
             
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
             }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.mainAnimator.addBehavior(snapBehavior)
             }
             
-            if subviews.index(of: v) == controlNodeIndices[0] {
-                v.center = CGPoint(x: v.center.x, y: v.center.y - elasticity)
+            if subviews.index(of: v) == cornerNodeIndices[0] {
+                v.center = CGPoint(x: v.center.x - elasticity, y: v.center.y - elasticity)
                 mainAnimator.updateItem(usingCurrentState: v)
-            } else if subviews.index(of: v) == controlNodeIndices[1] {
-                v.center = CGPoint(x: v.center.x + elasticity, y: v.center.y)
+            } else if subviews.index(of: v) == cornerNodeIndices[1] {
+                v.center = CGPoint(x: v.center.x + elasticity, y: v.center.y - elasticity)
                 mainAnimator.updateItem(usingCurrentState: v)
-            } else if subviews.index(of: v) == controlNodeIndices[2] {
-                v.center = CGPoint(x: v.center.x, y: v.center.y + elasticity)
+            } else if subviews.index(of: v) == cornerNodeIndices[2] {
+                v.center = CGPoint(x: v.center.x + elasticity, y: v.center.y + elasticity)
                 mainAnimator.updateItem(usingCurrentState: v)
-            } else if subviews.index(of: v) == controlNodeIndices[3] {
-                v.center = CGPoint(x: v.center.x - elasticity, y: v.center.y)
+            } else if subviews.index(of: v) == cornerNodeIndices[3] {
+                v.center = CGPoint(x: v.center.x - elasticity, y: v.center.y + elasticity)
                 mainAnimator.updateItem(usingCurrentState: v)
             }
         }
@@ -178,7 +173,7 @@ public extension FlubberView {
 }
 
 private extension FlubberView {
-
+    
     /// The number of nodes contained inside the FlubberView
     var nodeCount: Int {
         switch nodeDensity {
@@ -190,8 +185,8 @@ private extension FlubberView {
             return 5
         }
     }
-
-
+    
+    
     /// A collection containing the indices of the subviews
     /// at the midpoint of each of the FlubberView's 4 side
     var controlNodeIndices: [Int] {
@@ -204,8 +199,8 @@ private extension FlubberView {
             return [2, 14, 22, 15]
         }
     }
-
-
+    
+    
     /// A collection containing the indices of the subviews in
     /// the view's 4 corners
     var cornerNodeIndices: [Int] {
@@ -218,41 +213,41 @@ private extension FlubberView {
             return [0, 4, 24, 20]
         }
     }
-
-
+    
+    
     /// The path for the shapeLayer (if not nil)
     var viewPath: UIBezierPath {
-
+        
         /// Create bezier path
         let bPath: UIBezierPath = UIBezierPath()
-
+        
         /// Point on the left side of the top edge of the FlubberView, inset by the cornerRadius
         let topEdgeLeft = CGPoint(x: subviews[cornerNodeIndices[0]].center.x + cornerRadius,
                                   y: subviews[cornerNodeIndices[0]].center.y)
-
+        
         /// Point on the right side of the top edge of the FlubberView, inset by the cornerRadius
         let topEdgeRight = CGPoint(x: subviews[cornerNodeIndices[1]].center.x - cornerRadius,
                                    y: subviews[cornerNodeIndices[1]].center.y)
-
+        
         /// Point at the top of the right edge of the FlubberView, inset by the cornerRadius
         let rightEdgeTop = CGPoint(x: subviews[cornerNodeIndices[1]].center.x,
-                                      y: subviews[cornerNodeIndices[1]].center.y + cornerRadius)
+                                   y: subviews[cornerNodeIndices[1]].center.y + cornerRadius)
         
         /// Point at the bottom of the right edge of the FlubberView, inset by the cornerRadius
         let rightEdgeBottom = CGPoint(x: subviews[cornerNodeIndices[2]].center.x,
                                       y: subviews[cornerNodeIndices[2]].center.y - cornerRadius)
-
+        
         /// Point on the left side of the bottom edge of the FlubberView, inset by the cornerRadius
         let bottomEdgeLeft = CGPoint(x: subviews[cornerNodeIndices[3]].center.x + cornerRadius,
                                      y: subviews[cornerNodeIndices[3]].center.y)
-
+        
         /// Point at the top of the left edge of the FlubberView, inset by the cornerRadius
         let leftEdgeTop = CGPoint(x: subviews[cornerNodeIndices[0]].center.x,
                                   y: subviews[cornerNodeIndices[0]].center.y + cornerRadius)
-
+        
         // Draw a point at the top left corner
         bPath.move(to: topEdgeLeft)
-
+        
         var center: CGPoint
         
         if desiredSize.height <= cornerRadius * 2 {
@@ -340,8 +335,8 @@ private extension FlubberView {
         
         return bPath
     }
-
-
+    
+    
     /// Adds shapeLayer as a sublayer if not nil
     func setupMainLayer() {
         guard let shapeLayer = shapeLayer else {
@@ -349,31 +344,31 @@ private extension FlubberView {
         }
         layer.insertSublayer(shapeLayer, at: shapeLayerIndex)
     }
-
-
+    
+    
     /// Creates evenly spaced grid of subviews and adds them as subviews
     func compose() {
-
+        
         var tag: Int = 0
         let hSeparation = frame.size.width.separation(for: nodeCount)
         let vSeparation = frame.size.height.separation(for: nodeCount)
-
+        
         let (hAmtToCenter, vAmtToCenter) = frame.size.distanceToCenter
-
+        
         for i in 0..<nodeCount {
             for j in 0..<nodeCount {
                 let hMultiplier = CGFloat(j)
                 let vMultiplier = CGFloat(i)
                 let xOrigin = bounds.origin.x + hAmtToCenter + hSeparation * hMultiplier
                 let yOrigin = bounds.origin.y + vAmtToCenter + vSeparation * vMultiplier
-
+                
                 let childViewRect = CGRect(x: xOrigin,
                                            y: yOrigin,
                                            width: 3.0,
                                            height: 3.0)
-
+                
                 let childView = UIView(frame: childViewRect)
-
+                
                 childView.tag = tag
                 nodeCenterCoordinates.setObject(NSValue(cgPoint: childView.frame.origin),
                                                 forKey: childView)
@@ -383,58 +378,58 @@ private extension FlubberView {
         }
         attachViews()
     }
-
-
-
+    
+    
+    
     /// Binds all subviews to their (horizontally or vertically) adjacent views using
     /// a UIAttachmentBehavior
     func attachViews() {
-
+        
         let distanceBetweenNodes = frame.size.width/CGFloat(nodeCount - 1)
-
+        
         for i in 0..<subviews.count {
             let view = subviews[i]
-
+            
             for nextView in subviews {
                 if (view.center.x - nextView.center.x == distanceBetweenNodes) ||
                     (view.center.y - nextView.center.y == distanceBetweenNodes) {
                     let attach: UIAttachmentBehavior = UIAttachmentBehavior(item: view,
                                                                             attachedTo: nextView)
-
+                    
                     attach.damping = 0.1
                     attach.frequency = 1
-
+                    
                     mainAnimator.addBehavior(attach)
-
+                    
                     let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
                     bh.allowsRotation = false
                     bh.elasticity = 1
-
+                    
                     mainAnimator.addBehavior(bh)
                 }
             }
         }
     }
-
+    
     func reset() {
         subviews.forEach({ $0.removeFromSuperview() })
         compose()
     }
-
+    
 }
 
 private extension CGSize {
-
+    
     /// A coordinate pair representintg the distance from
     /// any edge of a CGRect of a given size to the center
     var distanceToCenter: (CGFloat, CGFloat) {
         return (width/2 - width/2, height/2 - height/2)
     }
-
+    
 }
 
 private extension CGFloat {
-
+    
     /// Calculates the distance that should separate each node
     ///
     /// - parameter nodeCount: the number of nodes contained in the FlubberView
@@ -443,5 +438,5 @@ private extension CGFloat {
     func separation(for nodeCount: Int) -> CGFloat {
         return self / CGFloat(nodeCount - 1)
     }
-
+    
 }
