@@ -128,7 +128,9 @@ public extension FlubberView {
                 mainAnimator.removeBehavior(behavior)
             }
 
-            mainAnimator.addBehavior(snapBehavior)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.mainAnimator.addBehavior(snapBehavior)
+            }
             v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
             mainAnimator.updateItem(usingCurrentState: v)
         }
@@ -141,15 +143,21 @@ public extension FlubberView {
             print("frequency: \(frequency)")
             let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
-            let elasticity = magnitude.elasticity * 2
+            let elasticity = magnitude.elasticity * 3
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
             
             snapBehavior.damping = 0.0
-            
+
             let oldBehavior = behaviors.object(forKey: v)
             behaviors.setObject(snapBehavior, forKey: v)
             
-            mainAnimator.addBehavior(snapBehavior)
+            if let behavior = oldBehavior {
+                mainAnimator.removeBehavior(behavior)
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.mainAnimator.addBehavior(snapBehavior)
+            }
             
             if subviews.index(of: v) == controlNodeIndices[0] {
                 v.center = CGPoint(x: v.center.x, y: v.center.y - elasticity)
@@ -393,13 +401,13 @@ private extension FlubberView {
                     let attach: UIAttachmentBehavior = UIAttachmentBehavior(item: view,
                                                                             attachedTo: nextView)
 
-                    attach.damping = 0
+                    attach.damping = 0.1
                     attach.frequency = 1
 
                     mainAnimator.addBehavior(attach)
 
                     let bh: UIDynamicItemBehavior = UIDynamicItemBehavior(items: [view])
-                    bh.resistance = 0
+                    bh.allowsRotation = false
                     bh.elasticity = 1
 
                     mainAnimator.addBehavior(bh)
