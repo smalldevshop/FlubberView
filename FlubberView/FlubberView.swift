@@ -141,7 +141,7 @@ public extension FlubberView {
             print("frequency: \(frequency)")
             let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
                 CGPoint(x: v.frame.midX, y: v.frame.midY)
-            let elasticity = magnitude.elasticity * 12
+            let elasticity = magnitude.elasticity * 2
             let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
             
             snapBehavior.damping = 0.0
