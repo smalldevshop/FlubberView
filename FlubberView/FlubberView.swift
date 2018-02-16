@@ -250,7 +250,7 @@ private extension FlubberView {
         
         var center: CGPoint
         
-        if desiredSize.height <= cornerRadius * 2 {
+        if desiredSize.height <= cornerRadius * 2.1 {
             bPath.addQuadCurve(to: topEdgeRight, controlPoint: subviews[controlNodeIndices[0]].center)
             center = CGPoint(x: topEdgeRight.x,
                              y: topEdgeRight.y + cornerRadius)
@@ -267,7 +267,7 @@ private extension FlubberView {
                          startAngle: CGFloat(M_PI_2),
                          endAngle: CGFloat(-M_PI_2),
                          clockwise: true)
-        } else if desiredSize.width <= cornerRadius * 2 {
+        } else if desiredSize.width <= cornerRadius * 2.1 {
             bPath.move(to: rightEdgeTop)
             center = CGPoint(x: topEdgeLeft.x,
                              y: topEdgeLeft.y + cornerRadius)
