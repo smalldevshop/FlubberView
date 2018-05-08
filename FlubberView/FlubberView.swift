@@ -113,38 +113,38 @@ public extension FlubberView {
     /// - parameter magnitude: controls the distance that each node
     /// will move during the animation
     func animate() {
-        for v in subviews {
-            let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
-                CGPoint(x: v.frame.midX, y: v.frame.midY)
+        for sub in subviews {
+            let initialPoint = nodeCenterCoordinates.object(forKey: sub)?.cgPointValue ??
+                CGPoint(x: sub.frame.midX, y: sub.frame.midY)
             let elasticity = magnitude.elasticity
-            let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
+            let snapBehavior = UISnapBehavior(item: sub, snapTo: initialPoint)
             
             snapBehavior.damping = damping
             
-            let oldBehavior = behaviors.object(forKey: v)
-            behaviors.setObject(snapBehavior, forKey: v)
+            let oldBehavior = behaviors.object(forKey: sub)
+            behaviors.setObject(snapBehavior, forKey: sub)
             
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
             }
             
             self.mainAnimator.addBehavior(snapBehavior)
-            v.center = CGPoint(x: v.center.x <~> elasticity, y: v.center.y <~> elasticity)
-            mainAnimator.updateItem(usingCurrentState: v)
+            sub.center = CGPoint(x: sub.center.x <~> elasticity, y: sub.center.y <~> elasticity)
+            mainAnimator.updateItem(usingCurrentState: sub)
         }
     }
     
     func pop() {
-        for v in subviews {
-            let initialPoint = nodeCenterCoordinates.object(forKey: v)?.cgPointValue ??
-                CGPoint(x: v.frame.midX, y: v.frame.midY)
+        for sub in subviews {
+            let initialPoint = nodeCenterCoordinates.object(forKey: sub)?.cgPointValue ??
+                CGPoint(x: sub.frame.midX, y: sub.frame.midY)
             let elasticity = magnitude.elasticity * 2
-            let snapBehavior = UISnapBehavior(item: v, snapTo: initialPoint)
+            let snapBehavior = UISnapBehavior(item: sub, snapTo: initialPoint)
             
             snapBehavior.damping = 0.0
             
-            let oldBehavior = behaviors.object(forKey: v)
-            behaviors.setObject(snapBehavior, forKey: v)
+            let oldBehavior = behaviors.object(forKey: sub)
+            behaviors.setObject(snapBehavior, forKey: sub)
             
             if let behavior = oldBehavior {
                 mainAnimator.removeBehavior(behavior)
@@ -154,18 +154,18 @@ public extension FlubberView {
                 self.mainAnimator.addBehavior(snapBehavior)
             }
             
-            if subviews.index(of: v) == cornerNodeIndices[0] {
-                v.center = CGPoint(x: v.center.x - elasticity, y: v.center.y - elasticity)
-                mainAnimator.updateItem(usingCurrentState: v)
-            } else if subviews.index(of: v) == cornerNodeIndices[1] {
-                v.center = CGPoint(x: v.center.x + elasticity, y: v.center.y - elasticity)
-                mainAnimator.updateItem(usingCurrentState: v)
-            } else if subviews.index(of: v) == cornerNodeIndices[2] {
-                v.center = CGPoint(x: v.center.x + elasticity, y: v.center.y + elasticity)
-                mainAnimator.updateItem(usingCurrentState: v)
-            } else if subviews.index(of: v) == cornerNodeIndices[3] {
-                v.center = CGPoint(x: v.center.x - elasticity, y: v.center.y + elasticity)
-                mainAnimator.updateItem(usingCurrentState: v)
+            if subviews.index(of: sub) == cornerNodeIndices[0] {
+                sub.center = CGPoint(x: sub.center.x - elasticity, y: sub.center.y - elasticity)
+                mainAnimator.updateItem(usingCurrentState: sub)
+            } else if subviews.index(of: sub) == cornerNodeIndices[1] {
+                sub.center = CGPoint(x: sub.center.x + elasticity, y: sub.center.y - elasticity)
+                mainAnimator.updateItem(usingCurrentState: sub)
+            } else if subviews.index(of: sub) == cornerNodeIndices[2] {
+                sub.center = CGPoint(x: sub.center.x + elasticity, y: sub.center.y + elasticity)
+                mainAnimator.updateItem(usingCurrentState: sub)
+            } else if subviews.index(of: sub) == cornerNodeIndices[3] {
+                sub.center = CGPoint(x: sub.center.x - elasticity, y: sub.center.y + elasticity)
+                mainAnimator.updateItem(usingCurrentState: sub)
             }
         }
     }
@@ -355,10 +355,10 @@ private extension FlubberView {
         
         let (hAmtToCenter, vAmtToCenter) = frame.size.distanceToCenter
         
-        for i in 0..<nodeCount {
-            for j in 0..<nodeCount {
-                let hMultiplier = CGFloat(j)
-                let vMultiplier = CGFloat(i)
+        for idxI in 0..<nodeCount {
+            for idxJ in 0..<nodeCount {
+                let hMultiplier = CGFloat(idxI)
+                let vMultiplier = CGFloat(idxJ)
                 let xOrigin = bounds.origin.x + hAmtToCenter + hSeparation * hMultiplier
                 let yOrigin = bounds.origin.y + vAmtToCenter + vSeparation * vMultiplier
                 
@@ -387,8 +387,8 @@ private extension FlubberView {
         
         let distanceBetweenNodes = frame.size.width/CGFloat(nodeCount - 1)
         
-        for i in 0..<subviews.count {
-            let view = subviews[i]
+        for idx in 0..<subviews.count {
+            let view = subviews[idx]
             
             for nextView in subviews {
                 if (view.center.x - nextView.center.x == distanceBetweenNodes) ||
