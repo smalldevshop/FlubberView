@@ -357,8 +357,8 @@ private extension FlubberView {
         
         for idxI in 0..<nodeCount {
             for idxJ in 0..<nodeCount {
-                let hMultiplier = CGFloat(idxI)
-                let vMultiplier = CGFloat(idxJ)
+                let hMultiplier = CGFloat(idxJ)
+                let vMultiplier = CGFloat(idxI)
                 let xOrigin = bounds.origin.x + hAmtToCenter + hSeparation * hMultiplier
                 let yOrigin = bounds.origin.y + vAmtToCenter + vSeparation * vMultiplier
                 
