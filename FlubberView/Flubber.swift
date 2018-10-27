@@ -13,7 +13,6 @@ public protocol Initializable {
     init()
 }
 
-
 /// Used to specify the number of nodes to be
 /// distributed inside the FlubberView
 ///

@@ -100,7 +100,7 @@ public extension FlubberView {
         super.didMoveToSuperview()
         setupMainLayer()
         displayLink = CADisplayLink(target: self, selector: #selector(FlubberView.redraw))
-        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
+        displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.default)
     }
     
     @objc func redraw() {
@@ -256,16 +256,16 @@ private extension FlubberView {
                              y: topEdgeRight.y + cornerRadius)
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
-                         startAngle: CGFloat(-M_PI_2),
-                         endAngle: CGFloat(M_PI_2),
+                         startAngle: CGFloat(-Double.pi / 2),
+                         endAngle: CGFloat(Double.pi / 2),
                          clockwise: true)
             
             center = CGPoint(x: topEdgeLeft.x,
                              y: topEdgeLeft.y + cornerRadius)
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
-                         startAngle: CGFloat(M_PI_2),
-                         endAngle: CGFloat(-M_PI_2),
+                         startAngle: CGFloat(Double.pi / 2),
+                         endAngle: CGFloat(-Double.pi / 2),
                          clockwise: true)
         } else if desiredSize.width <= cornerRadius * 2.1 {
             bPath.move(to: rightEdgeTop)
@@ -273,7 +273,7 @@ private extension FlubberView {
                              y: topEdgeLeft.y + cornerRadius)
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
-                         startAngle: CGFloat(-M_PI),
+                         startAngle: CGFloat(-Double.pi),
                          endAngle: CGFloat(0.0),
                          clockwise: true)
             bPath.addQuadCurve(to: rightEdgeBottom, controlPoint: subviews[controlNodeIndices[1]].center)
@@ -283,7 +283,7 @@ private extension FlubberView {
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
                          startAngle: CGFloat(0.0),
-                         endAngle: CGFloat(-M_PI),
+                         endAngle: CGFloat(-Double.pi),
                          clockwise: true)
             bPath.addQuadCurve(to: leftEdgeTop, controlPoint: subviews[controlNodeIndices[3]].center)
         } else {
@@ -294,7 +294,7 @@ private extension FlubberView {
                              y: topEdgeRight.y + cornerRadius)
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
-                         startAngle: CGFloat(M_PI_2),
+                         startAngle: CGFloat(Double.pi / 2),
                          endAngle: 0.0,
                          clockwise: true)
             
@@ -307,7 +307,7 @@ private extension FlubberView {
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
                          startAngle: 0,
-                         endAngle: CGFloat(M_PI_2),
+                         endAngle: CGFloat(Double.pi / 2),
                          clockwise: true)
             
             // move to the left end of the bottom edge through the center point of
@@ -317,8 +317,8 @@ private extension FlubberView {
                              y: subviews[cornerNodeIndices[3]].center.y - cornerRadius)
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
-                         startAngle: CGFloat(-M_PI_4),
-                         endAngle: CGFloat(M_PI),
+                         startAngle: CGFloat(-Double.pi / 4),
+                         endAngle: CGFloat(Double.pi),
                          clockwise: true)
             
             // move to the top end of the left edgee through the center point of
@@ -328,8 +328,8 @@ private extension FlubberView {
                              y: subviews[cornerNodeIndices[0]].center.y + cornerRadius)
             bPath.addArc(withCenter: center,
                          radius: cornerRadius,
-                         startAngle: CGFloat(M_PI),
-                         endAngle: CGFloat(M_PI_2),
+                         startAngle: CGFloat(Double.pi),
+                         endAngle: CGFloat(Double.pi / 2),
                          clockwise: true)
         }
         
