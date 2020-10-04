@@ -182,7 +182,7 @@ class ViewController: UIViewController {
         flubberView.addGestureRecognizer(gestureRecognizer)
     }
     
-    func didTap() {
+    @objc func didTap() {
         flubberView.pop()
     }
     
