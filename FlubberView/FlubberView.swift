@@ -154,16 +154,16 @@ public extension FlubberView {
                 self.mainAnimator.addBehavior(snapBehavior)
             }
             
-            if subviews.index(of: sub) == cornerNodeIndices[0] {
+            if subviews.firstIndex(of: sub) == cornerNodeIndices[0] {
                 sub.center = CGPoint(x: sub.center.x - elasticity, y: sub.center.y - elasticity)
                 mainAnimator.updateItem(usingCurrentState: sub)
-            } else if subviews.index(of: sub) == cornerNodeIndices[1] {
+            } else if subviews.firstIndex(of: sub) == cornerNodeIndices[1] {
                 sub.center = CGPoint(x: sub.center.x + elasticity, y: sub.center.y - elasticity)
                 mainAnimator.updateItem(usingCurrentState: sub)
-            } else if subviews.index(of: sub) == cornerNodeIndices[2] {
+            } else if subviews.firstIndex(of: sub) == cornerNodeIndices[2] {
                 sub.center = CGPoint(x: sub.center.x + elasticity, y: sub.center.y + elasticity)
                 mainAnimator.updateItem(usingCurrentState: sub)
-            } else if subviews.index(of: sub) == cornerNodeIndices[3] {
+            } else if subviews.firstIndex(of: sub) == cornerNodeIndices[3] {
                 sub.center = CGPoint(x: sub.center.x - elasticity, y: sub.center.y + elasticity)
                 mainAnimator.updateItem(usingCurrentState: sub)
             }
